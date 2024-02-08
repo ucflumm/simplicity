@@ -1,5 +1,6 @@
 const db = require("../models");
 const Item = db.items;
+const defaultPrice = 0;
 
 exports.create = (req, res) => {
   if (!req.body.name) {
@@ -8,11 +9,11 @@ exports.create = (req, res) => {
   }
   const item = new Item({
     name: req.body.name,
-    category: req.body.category,
-    quantity: req.body.quantity,
-    upc: req.body.upc,
-    costPrice: req.body.costPrice,
-    salePrice: req.body.salePrice,
+    category: req.body.category ? req.body.category : "Misc", 
+    quantity: req.body.quantity ? req.body.quantity : 0,
+    upc: req.body.upc ? req.body.upc : 0,
+    costPrice: req.body.costPrice ? req.body.costPrice : 0,
+    salePrice: req.body.salePrice ? req.body.salePrice : defaultPrice
   });
   item
     .save(item)
@@ -82,8 +83,7 @@ exports.updateQuantity = (req, res) => {
 
 exports.delete = (req, res) => {
   const id = req.params.id;
-  
-  Item.findByIdAndRemove()
+  Item.findByIdAndRemove(id)
     .then(data => {
       if (!data) {
         res.status(404).send({ message: `Cannot delete item with id ${id}. Item not found!` });
