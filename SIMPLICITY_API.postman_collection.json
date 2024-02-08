@@ -1,0 +1,796 @@
+{
+	"info": {
+		"_postman_id": "a03a4f62-845a-45f8-9769-21d85b0b86d2",
+		"name": "SIMPLICITY_API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32846623"
+	},
+	"item": [
+		{
+			"name": "http://localhost:3030/api/item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Olaf mini figurine\",\r\n    \"category\": \"Toys\",\r\n    \"quantity\": 24,\r\n    \"costPrice\": 2.00,\r\n    \"salePrice\": 3.00\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3030/api/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api",
+						"item"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "single name field only",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pikachu Lego\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "all fields success",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Olaf mini figurine\",\r\n    \"category\": \"Toys\",\r\n    \"quantity\": 24,\r\n    \"costPrice\": 2.00,\r\n    \"salePrice\": 3.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "name is empty",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "no name value pair",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "single name only example",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Pikachu Lego\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "209"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"d1-Ve6FlDXEmSHOWJ/a75lytJd+3N8\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:23:43 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"Pikachu Lego\",\n    \"category\": \"Misc\",\n    \"quantity\": 0,\n    \"upc\": 0,\n    \"costPrice\": 0,\n    \"salePrice\": 0,\n    \"_id\": \"65c43b2f58ebbccfff7d9723\",\n    \"createdAt\": \"2024-02-08T02:23:43.293Z\",\n    \"updatedAt\": \"2024-02-08T02:23:43.293Z\",\n    \"__v\": 0\n}"
+				},
+				{
+					"name": "all fields success example",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"Olaf mini figurine\",\r\n    \"category\": \"Toys\",\r\n    \"quantity\": 24,\r\n    \"costPrice\": 2.00,\r\n    \"salePrice\": 3.00\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "216"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"d8-p6e16+0/VBoUMbELWAl7ihuFWg4\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:24:18 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"name\": \"Olaf mini figurine\",\n    \"category\": \"Toys\",\n    \"quantity\": 24,\n    \"upc\": 0,\n    \"costPrice\": 2,\n    \"salePrice\": 3,\n    \"_id\": \"65c43b5258ebbccfff7d9725\",\n    \"createdAt\": \"2024-02-08T02:24:18.752Z\",\n    \"updatedAt\": \"2024-02-08T02:24:18.752Z\",\n    \"__v\": 0\n}"
+				},
+				{
+					"name": "name empty example",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"23-UEFUXOGziZLMPwWmxE78XUUZWYI\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:25:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Name cannot be empty!\"\n}"
+				},
+				{
+					"name": "no name value pair example",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"quantity\": 4\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "35"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"23-UEFUXOGziZLMPwWmxE78XUUZWYI\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:25:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Name cannot be empty!\"\n}"
+				}
+			]
+		},
+		{
+			"name": "http://localhost:3030/api/item",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3030/api/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api",
+						"item"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "http://localhost:3030/api/item",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "query success example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/api/item",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "1065"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"429-Lp3vz9hFp4iTgzOdZg5re82QJYw\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:21:58 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "[\n    {\n        \"_id\": \"65c4321f6cbf8a1f3f9d084b\",\n        \"name\": \"Olaf mini figurine\",\n        \"category\": \"Toys\",\n        \"quantity\": 24,\n        \"upc\": 0,\n        \"costPrice\": 2,\n        \"salePrice\": 3,\n        \"createdAt\": \"2024-02-08T01:45:03.621Z\",\n        \"updatedAt\": \"2024-02-08T01:45:03.621Z\",\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"65c4330258ebbccfff7d9716\",\n        \"name\": \"Pikachu Lego\",\n        \"category\": \"Misc\",\n        \"quantity\": 0,\n        \"upc\": 0,\n        \"costPrice\": 0,\n        \"salePrice\": 0,\n        \"createdAt\": \"2024-02-08T01:48:50.717Z\",\n        \"updatedAt\": \"2024-02-08T01:48:50.717Z\",\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"65c4392d58ebbccfff7d9718\",\n        \"name\": \"Olaf mini figurine\",\n        \"category\": \"Toys\",\n        \"quantity\": 24,\n        \"upc\": 0,\n        \"costPrice\": 2,\n        \"salePrice\": 3,\n        \"createdAt\": \"2024-02-08T02:15:09.619Z\",\n        \"updatedAt\": \"2024-02-08T02:15:09.619Z\",\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"65c4393258ebbccfff7d971a\",\n        \"name\": \"Pikachu Lego\",\n        \"category\": \"Misc\",\n        \"quantity\": 0,\n        \"upc\": 0,\n        \"costPrice\": 0,\n        \"salePrice\": 0,\n        \"createdAt\": \"2024-02-08T02:15:14.242Z\",\n        \"updatedAt\": \"2024-02-08T02:15:14.242Z\",\n        \"__v\": 0\n    },\n    {\n        \"_id\": \"65c4393a58ebbccfff7d971c\",\n        \"name\": \"Pikachu Lego\",\n        \"category\": \"Misc\",\n        \"quantity\": 0,\n        \"upc\": 0,\n        \"costPrice\": 0,\n        \"salePrice\": 0,\n        \"createdAt\": \"2024-02-08T02:15:22.396Z\",\n        \"updatedAt\": \"2024-02-08T02:15:22.396Z\",\n        \"__v\": 0\n    }\n]"
+				}
+			]
+		},
+		{
+			"name": "http://localhost:3030/api/item/:id65c4321f6cbf8a1f3f9d084b",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3030/api/item/:id",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api",
+						"item",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "65c4321f6cbf8a1f3f9d084b"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "using id 65c4321f6cbf8a1f3f9d084b",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/api/item/65c4321f6cbf8a1f3f9d084b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item",
+								"65c4321f6cbf8a1f3f9d084b"
+							]
+						}
+					},
+					"_postman_previewlanguage": null,
+					"header": null,
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "query success example",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/api/item/65c4321f6cbf8a1f3f9d084b",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item",
+								"65c4321f6cbf8a1f3f9d084b"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "216"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"d8-hAXaYJgZVS1YVq3WBMlUVjMcAAY\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:22:21 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"_id\": \"65c4321f6cbf8a1f3f9d084b\",\n    \"name\": \"Olaf mini figurine\",\n    \"category\": \"Toys\",\n    \"quantity\": 24,\n    \"upc\": 0,\n    \"costPrice\": 2,\n    \"salePrice\": 3,\n    \"createdAt\": \"2024-02-08T01:45:03.621Z\",\n    \"updatedAt\": \"2024-02-08T01:45:03.621Z\",\n    \"__v\": 0\n}"
+				}
+			]
+		},
+		{
+			"name": "put request",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3030/api/item/:id/quantity/:quantity",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3030",
+					"path": [
+						"api",
+						"item",
+						":id",
+						"quantity",
+						":quantity"
+					],
+					"query": [
+						{
+							"key": null,
+							"value": "",
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "65c43b2f58ebbccfff7d9723"
+						},
+						{
+							"key": "quantity",
+							"value": "20"
+						}
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "editing olaf quantity",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:3030/api/item/:id/quantity/:quantity",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "3030",
+							"path": [
+								"api",
+								"item",
+								":id",
+								"quantity",
+								":quantity"
+							],
+							"query": [
+								{
+									"key": null,
+									"value": "",
+									"disabled": true
+								}
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "65c43b2f58ebbccfff7d9723"
+								},
+								{
+									"key": "quantity",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "http://localhost:3031"
+						},
+						{
+							"key": "Vary",
+							"value": "Origin"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "Content-Length",
+							"value": "40"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"28-uf2LJ5L9avIdAn2iB1+VtPG/lIU\""
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 08 Feb 2024 02:34:30 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"message\": \"Item updated successfully.\"\n}"
+				}
+			]
+		}
+	]
+}
