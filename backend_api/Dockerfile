@@ -1,5 +1,5 @@
 # Use the official Node.js 14 image as a parent image
-FROM node:20:11.0
+FROM node:20.11.0
 
 # Set the working directory in the container
 WORKDIR /app/backend
