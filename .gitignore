@@ -1,1 +1,10 @@
 node_modules
+mongo_db/*
+backend_api/package-lock.json
+*.wt
+*.lock
+*.bson
+mongodb/_mdb_catalog.wt
+mongodb/sizeStorer.wt
+mongodb/WiredTiger.turtle
+mongodb/WiredTiger.wt

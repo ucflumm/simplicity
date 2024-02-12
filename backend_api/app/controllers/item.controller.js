@@ -83,7 +83,7 @@ exports.updateQuantity = (req, res) => {
 
 exports.delete = (req, res) => {
   const id = req.params.id;
-  Item.findByIdAndRemove(id)
+  Item.findOneAndDelete(id)
     .then(data => {
       if (!data) {
         res.status(404).send({ message: `Cannot delete item with id ${id}. Item not found!` });
