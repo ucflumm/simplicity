@@ -1,4 +1,4 @@
-simplicity app
+#simplicity app
 to run
 ```
 mkdir simplicity 
