@@ -1,11 +1,13 @@
 # simplicity app
 to run
 ```
-mkdir simplicity 
+mkdir simplicity
 cd simplicity
 ```
 clone repo
 ``` git clone ```
+build
+```docker-compose build```
 run docker compose up
 ``` docker compose up ```
 
