@@ -1,4 +1,8 @@
 # simplicity app
+## requirements
+**docker** ```sudo apt install docker```
+**docker-compose** ``sudo apt install docker-compose```
+
 to run
 ```
 mkdir simplicity
