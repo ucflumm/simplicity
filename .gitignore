@@ -1,2 +1,3 @@
 node_modules
 mongo_db/*
+backend_api/package-lock.json
