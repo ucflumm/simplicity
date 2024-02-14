@@ -62,7 +62,7 @@ exports.findbyParams = (req, res) => {
     });
 }
 
-// Not even sure what this does ?? Replaced by updateParamById
+// Updates item by body of request
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({ message: "Data to update cannot be empty!" });

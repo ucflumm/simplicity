@@ -16,7 +16,7 @@
   router.get("/param/:param/value/:value", item.findbyParams);
   //Find all zero quantity items
   router.get("/zero", item.findAllZeroQuantity);
-  // Update a Item with id
+  // Update a Item with id by using the body of the request.
   router.put("/:id", item.update);
   // Update a Item's quantity with id
   router.put("/:id/quantity/:quantity", item.updateQuantity);
