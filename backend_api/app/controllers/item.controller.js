@@ -169,6 +169,21 @@ exports.updateParamById = (req, res) => {
     });
 }
 
+exports.findOneById = (req, res) => {
+  const id = req.params.id;
+  Item.findById(id)
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: `Cannot find item with id ${id}.` });
+      } else {
+        res.send(data);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: "Error retrieving item with id " + id });
+    });
+}
+
 function validateParams(param, value) {
   if (param === "quantity") {
     if (isNaN(value) || value < 0) {

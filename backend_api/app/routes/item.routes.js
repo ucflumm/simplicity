@@ -10,7 +10,7 @@
   router.get("/", item.findAll);
 
   // Retrieve a single Item with id
-  //router.get("/:id", item.findOne);
+  router.get("/:id", item.findOneById);
 
   // Retrieve a single Item with param and value
   router.get("/param/:param/value/:value", item.findbyParams);
