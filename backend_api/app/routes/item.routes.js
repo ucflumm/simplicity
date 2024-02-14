@@ -12,10 +12,16 @@
   // Retrieve a single Item with id
   router.get("/:id", item.findOne);
 
+  // Retrieve a single Item with param and value
+  router.get("/:param/:value", item.findbyParams);
+
   // Update a Item with id
   router.put("/:id", item.update);
   // Update a Item's quantity with id
   router.put("/:id/quantity/:quantity", item.updateQuantity);
+
+  //update quantity via upc
+  router.put("/upc/:upc/quantity/:quantity", item.updateQuantityByUPC);
 
   // Delete a Item with id
   router.delete("/:id", item.delete);
