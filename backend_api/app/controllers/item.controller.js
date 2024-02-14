@@ -62,19 +62,7 @@ exports.findbyParams = (req, res) => {
     });
 }
 
-// exports.findOne = (req, res) => {
-//   const id = req.params.id;
-//   Item.findById(id)
-//     .then(data => {
-//       if (!data)
-//         res.status(404).send({ message: "Item not found with id " + id });
-//       else res.send(data);
-//     })
-//     .catch(err => {
-//       res.status(500).send({ message: "Error retrieving item with id " + id });
-//     });
-// }
-
+// Not even sure what this does ?? Replaced by updateParamById
 exports.update = (req, res) => {
   if (!req.body) {
     return res.status(400).send({ message: "Data to update cannot be empty!" });
@@ -122,16 +110,6 @@ exports.delete = (req, res) => {
     });
 }
 
-exports.deleteAll = (req, res) => {
-  Item.deleteMany({})
-    .then(data => {
-      res.send({ message: `${data.deletedCount} items were deleted successfully.` });
-    })
-    .catch(err => {
-      res.status(500).send({ message: err.message || "An error occurred while deleting items." });
-    });
-}
-
 // This needs some testing when there are no items and items are added all have positive quantities
 exports.findAllZeroQuantity = (req, res) => {
   Item.find({ quantity: 0 })
@@ -163,4 +141,57 @@ exports.updateQuantityByUPC = (req, res) => {
     .catch(err => {
       res.status(500).send({ message: "Error updating item with upc " + upc });
     });
+}
+
+exports.updateParamById = (req, res) => {
+  const id = req.params.id;
+  const param = req.params.param;
+  const value = req.params.value;
+  const query = {};
+  query[param] = value;
+
+  const validationError = validateParams(param, value);
+  if (validationError) {
+    res.status(400).send(validationError);
+    return;
+  }
+
+  Item.findByIdAndUpdate({ _id: id }, query, { new: true, useFindAndModify: false })
+    .then(data => {
+      if (!data) {
+        res.status(404).send({ message: `Cannot update item with id ${id}. Item not found!` });
+      } else { 
+        res.send(data);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: "Error updating item with id " + id });
+    });
+}
+
+function validateParams(param, value) {
+  if (param === "quantity") {
+    if (isNaN(value) || value < 0) {
+      return { message: "Quantity must be equal or greater than zero!" };
+    }
+  }
+
+  if (param === "salePrice" || param === "costPrice") {
+    if (isNaN(value) || value < 0) {
+      return { message: "Price must be equal or greater than zero!" };
+    }
+  }
+
+  if (param === "upc") {
+    if (isNaN(value) || value < 0) {
+      return { message: "UPC must be a positive number!" };
+    }
+  }
+
+  if (param === "name" || param === "category" || param === "location") {
+    if (value === "") {
+      return { message: "Name, category, and location cannot be empty!" };
+    }
+  }
+  return null;
 }
