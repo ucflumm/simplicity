@@ -8,3 +8,4 @@ mongodb/_mdb_catalog.wt
 mongodb/sizeStorer.wt
 mongodb/WiredTiger.turtle
 mongodb/WiredTiger.wt
+mongodb/WiredTiger
