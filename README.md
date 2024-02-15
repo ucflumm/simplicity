@@ -10,13 +10,12 @@ cd simplicity
 ```
 clone repo
 ``` git clone ```
-build
-```docker-compose build```
 run docker compose up
 ``` docker compose up ```
 
-mongodb rebuild (in case it breaks from updating)
-```docker-compose up --force-recreate --no-deps mysql```
+container rebuild (in case it breaks from updating)
+```docker-compose up --build --force-recreate --no-deps backend```
+```docker-compose up --build --force-recreate --no-deps frontend```
 
 #### api is in backend_api port **3030**
 #### frontend runs react on port **3000**
