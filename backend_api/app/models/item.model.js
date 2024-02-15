@@ -10,6 +10,7 @@ module.exports = mongoose => {
         upc: Number,
         costPrice: Number,
         salePrice: Number,
+        location: String,
       },
       { timestamps: true }
     )
