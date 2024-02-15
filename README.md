@@ -15,6 +15,9 @@ build
 run docker compose up
 ``` docker compose up ```
 
+mongodb rebuild (in case it breaks from updating)
+```docker-compose up --force-recreate --no-deps mysql```
+
 #### api is in backend_api port **3030**
 #### frontend runs react on port **3000**
 #### mongodb
