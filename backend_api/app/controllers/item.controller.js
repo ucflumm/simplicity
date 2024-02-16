@@ -184,6 +184,23 @@ exports.findOneById = (req, res) => {
     });
 }
 
+// Todo update specific error
+exports.findOneByUPC = (req, res) => {
+  const upc = req.params.upc;
+  Item.findOne({ upc: upc })
+    .then(data => {
+      if (!data || upc === NaN || upc < 0) {
+        res.status(404).send({ message: `Cannot find item with upc ${upc}.` });
+      }
+      else {
+        res.send(data);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message || "An error occurred while retrieving items." });
+    });
+}
+
 function validateParams(param, value) {
   if (param === "quantity") {
     if (isNaN(value) || value < 0) {
