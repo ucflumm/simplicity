@@ -9,6 +9,8 @@
   router.get("/", item.findAll);
   // Retrieve a single Item with id
   router.get("/id/:id", item.findOneById);
+  // Retrieve a single Item with upc
+  router.get("/upc/:upc", item.findOneByUPC);
   // Retrieve a single Item with param and value
   router.get("/param/:param/value/:value", item.findbyParams);
   //Find all zero quantity items
