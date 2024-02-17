@@ -1,0 +1,117 @@
+.sidenav {
+  height: 100%;
+  /* Full-height */
+  width: 240px;
+  /* Set the width of the sidebar */
+  position: fixed;
+  /* Fixed Sidebar (stay in place on scroll) */
+  z-index: 1;
+  /* Stay on top */
+  top: 70px;
+  height: calc(100% - 70px);
+  /* Stay at the top */
+  left: 0;
+  background-color: #060606;
+  /* Black */
+  overflow-x: hidden;
+  /* Disable horizontal scroll */
+  padding-top: 20px;
+  background-color: #060606;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.sidenav .nav-item .nav-text {
+  padding: 6px 8px 6px 16px;
+  text-decoration: none;
+  font-size: 25px;
+  color: white;
+  display: block;
+  transition: opacity 0.3s ease;
+}
+
+.nav-item:hover {
+  background-color: #5e17eb;
+  /* Darker purple for hover effect */
+}
+
+/* Style for the active or current nav-item */
+.nav-item.active {
+  background-color: #0097b2;
+  /* blue to match logo for active state */
+}
+
+.nav-item {
+  margin-top: 30px;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  /* Increased padding for more space around text and icon */
+  /* margin: 8px 0; */
+  justify-content: center;
+  /* Margin for spacing between buttons */
+  transition: background-color 0.3s;
+  /* Smooth transition for hover effect */
+  cursor: pointer;
+  /* Change cursor to pointer to indicate clickable items */
+}
+
+.sidenav .nav-item .nav-text.hidden {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  transition: opacity 0.3s ease, width 0s 0.3s, height 0s 0.3s;
+  /* Hide text and remove space */
+}
+
+.sidenav.collapsed {
+  width: 80px;
+  /* Smaller width when collapsed */
+}
+
+.sidenav.collapsed .nav-item a {
+  justify-content: center;
+  /* Center icons when collapsed */
+  padding-left: 0;
+  /* Remove padding */
+  padding-right: 0;
+  /* Remove padding */
+}
+
+.toggle-btn {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 12px;
+  /* Adjust as needed */
+  cursor: pointer;
+}
+
+/* Hide the toggle button text when the sidenav is not collapsed
+.sidenav:not(.collapsed) .toggle-btn {
+  display: none;
+} */
+
+.sidenav .toggle-btn {
+  position: absolute;
+  /* Position it relative to the sidenav */
+  bottom: 0;
+  /* Align to the bottom */
+  right: 0;
+  /* Align to the right side within the sidenav */
+  z-index: 2;
+  /* Ensure it's above other elements */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  /* Full width of the collapsed sidebar */
+  height: 70px;
+  /* Height to match the top bar height */
+  cursor: pointer;
+  background-color: #000;
+  /* Match the sidebar color */
+}
