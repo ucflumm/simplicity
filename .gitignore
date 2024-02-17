@@ -10,5 +10,8 @@ mongodb/WiredTiger.turtle
 mongodb/WiredTiger.wt
 mongodb/WiredTiger
 .DS_Store
+<<<<<<< HEAD
 mongo_db/
 *.interim
+=======
+>>>>>>> fbcecc3 (ds store ignore)
