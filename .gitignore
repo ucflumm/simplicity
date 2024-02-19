@@ -9,3 +9,4 @@ mongodb/sizeStorer.wt
 mongodb/WiredTiger.turtle
 mongodb/WiredTiger.wt
 mongodb/WiredTiger
+.DS_Store

@@ -1,0 +1,13 @@
+.white-container {
+  background-color: #ffffff;
+  /* Set the background color to white */
+  margin: 20px;
+  /* Add some margin if needed */
+  padding: 20px;
+  /* Add padding to ensure the content isn't flush against the edges */
+  border-radius: 5px;
+  /* Optional: if you want rounded corners */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Optional: to add a subtle shadow for some depth */
+  /* Add other styles as needed */
+}
