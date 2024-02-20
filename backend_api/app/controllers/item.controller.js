@@ -267,3 +267,22 @@ function validateParams(param, value) {
   }
   return null;
 }
+
+exports.findByNameContains = (req, res) => {
+  const name = req.params.name;
+  const isNumber = !isNaN(name);
+  const regex = isNumber ? new RegExp(name) : new RegExp(name, "i");
+  const query = isNumber ? { upc: { $regex: regex } } : { name: { $regex: regex, $options: "i" } };
+
+  Item.find(query)
+    .then(data => {
+      if (!data || data.length === 0) {
+        res.status(404).send({ message: `Cannot find items with name or UPC containing ${name}.` });
+      } else {
+        res.send(data);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message || "An error occurred while retrieving items." });
+    });
+}
