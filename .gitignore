@@ -11,7 +11,11 @@ mongodb/WiredTiger.wt
 mongodb/WiredTiger
 .DS_Store
 <<<<<<< HEAD
+<<<<<<< HEAD
 mongo_db/
 *.interim
 =======
 >>>>>>> fbcecc3 (ds store ignore)
+=======
+*.interim
+>>>>>>> c2faf02 (added gitignore)
