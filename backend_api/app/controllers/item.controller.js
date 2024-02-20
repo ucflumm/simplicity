@@ -8,28 +8,65 @@ const defaultPrice = 0;
 */
 
 exports.create = (req, res) => {
+  const validations = {
+    upc: req.body.upc,
+    quantity: req.body.quantity,
+    costPrice: req.body.costPrice,
+    salePrice: req.body.salePrice,
+    location: req.body.location,
+    category: req.body.category
+  };
+
+  // Check if name is empty
   if (!req.body.name) {
     res.status(400).send({ message: "Name cannot be empty!" });
     return;
   }
-  const item = new Item({
-    name: req.body.name,
-    category: req.body.category ? req.body.category : "Misc", 
-    quantity: req.body.quantity ? req.body.quantity : 0,
-    upc: req.body.upc ? req.body.upc : 0,
-    costPrice: req.body.costPrice ? req.body.costPrice : 0,
-    salePrice: req.body.salePrice ? req.body.salePrice : defaultPrice,
-    location: req.body.location ? req.body.location : "Unknown"
-  });
-  item
-    .save(item)
+
+  // Validate other parameters
+  for (let [key, value] of Object.entries(validations)) {
+    const validationMessage = validateParams(key, value);
+    if (validationMessage) {
+      res.status(400).send(validationMessage);
+      return;
+    }
+  }
+  const createNewItem = () => {
+    const item = new Item({
+      name: req.body.name,
+      category: req.body.category || "Misc",
+      quantity: req.body.quantity || 0,
+      upc: req.body.upc || 0,
+      costPrice: req.body.costPrice || 0,
+      salePrice: req.body.salePrice || defaultPrice, // Make sure defaultPrice is defined
+      location: req.body.location || "Unknown"
+    });
+
+    item.save()
+      .then(data => {
+        res.send(data);
+      })
+      .catch(err => {
+        res.status(500).send({ message: err.message || "An error occurred while creating the item." });
+      });
+  };
+
+  if (!req.body.upc) { 
+    req.body.upc = Math.floor(Math.random() * 1000000000);
+  }
+
+  Item.findOne({ upc: req.body.upc })
     .then(data => {
-      res.send(data);
+      if (data) {
+        res.status(400).send({ message: "UPC already exists!" });
+      } else {
+        createNewItem();
+      }
     })
     .catch(err => {
       res.status(500).send({ message: err.message || "An error occurred while creating the item." });
     });
-}
+};
 
 exports.findAll = (req, res) => {
   const name = req.query.name;
@@ -41,7 +78,7 @@ exports.findAll = (req, res) => {
     .catch(err => {
       res.status(500).send({ message: err.message || "An error occurred while retrieving items." });
     });
-}
+};
 
 exports.findbyParams = (req, res) => {
   const param = req.params.param;
@@ -202,6 +239,9 @@ exports.findOneByUPC = (req, res) => {
 }
 
 function validateParams(param, value) {
+  if (value === undefined || value === null) {
+    return  null;
+  }
   if (param === "quantity") {
     if (isNaN(value) || value < 0) {
       return { message: "Quantity must be equal or greater than zero!" };
