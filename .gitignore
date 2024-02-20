@@ -12,6 +12,7 @@ mongodb/WiredTiger
 .DS_Store
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 mongo_db/
 *.interim
 =======
@@ -19,3 +20,6 @@ mongo_db/
 =======
 *.interim
 >>>>>>> c2faf02 (added gitignore)
+=======
+*.interim
+>>>>>>> c2faf026499fc6074be7023df883e11a664c9621
