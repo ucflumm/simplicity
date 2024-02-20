@@ -11,3 +11,4 @@ mongodb/WiredTiger.wt
 mongodb/WiredTiger
 .DS_Store
 mongo_db/
+*.interim
