@@ -269,15 +269,16 @@ function validateParams(param, value) {
 }
 
 exports.findByNameContains = (req, res) => {
-  const name = req.params.name;
-  const isNumber = !isNaN(name);
-  const regex = isNumber ? new RegExp(name) : new RegExp(name, "i");
-  const query = isNumber ? { upc: { $regex: regex } } : { name: { $regex: regex, $options: "i" } };
+  const name = req.params.search;
+  const regex = new RegExp(name, "i");
+  console.log(regex);
+  const query = { name: { $regex: regex } };
+  console.log(query);
 
   Item.find(query)
     .then(data => {
       if (!data || data.length === 0) {
-        res.status(404).send({ message: `Cannot find items with name or UPC containing ${name}.` });
+        res.status(404).send({ message: `Cannot find items with name containing ${name}.` });
       } else {
         res.send(data);
       }
