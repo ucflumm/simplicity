@@ -267,3 +267,23 @@ function validateParams(param, value) {
   }
   return null;
 }
+
+exports.findByNameContains = (req, res) => {
+  const name = req.params.search;
+  const regex = new RegExp(name, "i");
+  console.log(regex);
+  const query = { name: { $regex: regex } };
+  console.log(query);
+
+  Item.find(query)
+    .then(data => {
+      if (!data || data.length === 0) {
+        res.status(404).send({ message: `Cannot find items with name containing ${name}.` });
+      } else {
+        res.send(data);
+      }
+    })
+    .catch(err => {
+      res.status(500).send({ message: err.message || "An error occurred while retrieving items." });
+    });
+}
