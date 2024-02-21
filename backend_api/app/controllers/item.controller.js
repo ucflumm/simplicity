@@ -271,6 +271,7 @@ function validateParams(param, value) {
 exports.findByNameContains = (req, res) => {
   const name = req.params.search;
   const regex = new RegExp(name, "i");
+  // remove these console logs
   console.log(regex);
   const query = { name: { $regex: regex } };
   console.log(query);
