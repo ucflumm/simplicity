@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Snackbar, Alert } from '@mui/material';
 import axios from 'axios';
-import useSnackbar from './hooks/useSnackbar';
+import useSnackbar from './hooks/useSnackBar';
 
 const CreateItem = () => {
   const [item, setItem] = useState({
@@ -74,7 +74,7 @@ const CreateItem = () => {
 
     if (isFormValid) {
       console.log('Form is valid', item);
-      axios.post('<http://localhost:3030/api/item>', item)
+      axios.post('http://localhost:3030/api/item', item)
         .then(response => {
           console.log(response.data);
           showSnackbar('Item created successfully!');
