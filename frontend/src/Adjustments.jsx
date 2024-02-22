@@ -86,6 +86,57 @@ const Adjustments = ({ upc }) => {
           </Select>
         </FormControl>
         {/* Other fields similar to above, set disabled={!isEditing} */}
+         {/* Quantity Field */}
+         <TextField
+          margin="normal"
+          fullWidth
+          id="quantity"
+          label="Quantity"
+          name="quantity"
+          type="number"
+          value={item.quantity}
+          onChange={handleChange}
+          disabled={!isEditing}
+        />
+
+        {/* Cost Price Field */}
+        <TextField
+          margin="normal"
+          fullWidth
+          id="costPrice"
+          label="Cost Price"
+          name="costPrice"
+          type="number"
+          value={item.costPrice}
+          onChange={handleChange}
+          disabled={!isEditing}
+        />
+
+        {/* Sale Price Field */}
+        <TextField
+          margin="normal"
+          fullWidth
+          id="salePrice"
+          label="Sale Price"
+          name="salePrice"
+          type="number"
+          value={item.salePrice}
+          onChange={handleChange}
+          disabled={!isEditing}
+        />
+
+        {/* Location Field */}
+        <TextField
+          margin="normal"
+          fullWidth
+          id="location"
+          label="Location"
+          name="location"
+          value={item.location}
+          onChange={handleChange}
+          disabled={!isEditing}
+        />
+
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
           <Button type="submit" variant="contained" sx={{ mr: 1 }}>
             {isEditing ? 'Save Changes' : 'Edit'}
