@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Snackbar, Alert } from '@mui/material';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Snackbar, Alert, Typography } from '@mui/material';
 import axios from 'axios';
 import useSnackbar from './hooks/useSnackBar';
+import EditIcon from '@mui/icons-material/Edit';
 
 const Adjustments = ({ upc }) => {
   const [item, setItem] = useState({
@@ -56,93 +57,110 @@ const Adjustments = ({ upc }) => {
 
   return (
     <>
+    <Typography variant="h4" gutterBottom>
+      Item Details
+      <EditIcon onClick={() => setIsEditing(!isEditing)} />
+    </Typography>
+    {isEditing ? (
       <Box component="form" noValidate autoComplete="off" onSubmit={handleEdit}>
-        <TextField
-          margin="normal"
-          fullWidth
-          id="name"
-          label="Name"
-          name="name"
-          value={item.name}
+      <TextField
+        margin="normal"
+        fullWidth
+        id="name"
+        label="Name"
+        name="name"
+        value={item.name}
+        onChange={handleChange}
+        disabled={!isEditing}
+      />
+      <FormControl fullWidth margin="normal" disabled={!isEditing}>
+        <InputLabel id="category-label">Category</InputLabel>
+        <Select
+          labelId="category-label"
+          id="category"
+          name="category"
+          value={item.category}
           onChange={handleChange}
-          disabled={!isEditing}
-        />
-        <FormControl fullWidth margin="normal" disabled={!isEditing}>
-          <InputLabel id="category-label">Category</InputLabel>
-          <Select
-            labelId="category-label"
-            id="category"
-            name="category"
-            value={item.category}
-            onChange={handleChange}
-            label="Category"
-          >
-            <MenuItem value="Electronics">Electronics</MenuItem>
-            <MenuItem value="Games">Games</MenuItem>
-            <MenuItem value="Clothing">Clothing</MenuItem>
-            <MenuItem value="Misc">Misc</MenuItem>
-            <MenuItem value="Food">Food</MenuItem>
-            <MenuItem value="Books">Books</MenuItem>
-          </Select>
-        </FormControl>
-        {/* Other fields similar to above, set disabled={!isEditing} */}
-         {/* Quantity Field */}
-         <TextField
-          margin="normal"
-          fullWidth
-          id="quantity"
-          label="Quantity"
-          name="quantity"
-          type="number"
-          value={item.quantity}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
+          label="Category"
+        >
+          <MenuItem value="Electronics">Electronics</MenuItem>
+          <MenuItem value="Games">Games</MenuItem>
+          <MenuItem value="Clothing">Clothing</MenuItem>
+          <MenuItem value="Misc">Misc</MenuItem>
+          <MenuItem value="Food">Food</MenuItem>
+          <MenuItem value="Books">Books</MenuItem>
+        </Select>
+      </FormControl>
+      {/* Other fields similar to above, set disabled={!isEditing} */}
+       {/* Quantity Field */}
+       <TextField
+        margin="normal"
+        fullWidth
+        id="quantity"
+        label="Quantity"
+        name="quantity"
+        type="number"
+        value={item.quantity}
+        onChange={handleChange}
+        disabled={!isEditing}
+      />
 
-        {/* Cost Price Field */}
-        <TextField
-          margin="normal"
-          fullWidth
-          id="costPrice"
-          label="Cost Price"
-          name="costPrice"
-          type="number"
-          value={item.costPrice}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
+      {/* Cost Price Field */}
+      <TextField
+        margin="normal"
+        fullWidth
+        id="costPrice"
+        label="Cost Price"
+        name="costPrice"
+        type="number"
+        value={item.costPrice}
+        onChange={handleChange}
+        disabled={!isEditing}
+      />
 
-        {/* Sale Price Field */}
-        <TextField
-          margin="normal"
-          fullWidth
-          id="salePrice"
-          label="Sale Price"
-          name="salePrice"
-          type="number"
-          value={item.salePrice}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
+      {/* Sale Price Field */}
+      <TextField
+        margin="normal"
+        fullWidth
+        id="salePrice"
+        label="Sale Price"
+        name="salePrice"
+        type="number"
+        value={item.salePrice}
+        onChange={handleChange}
+        disabled={!isEditing}
+      />
 
-        {/* Location Field */}
-        <TextField
-          margin="normal"
-          fullWidth
-          id="location"
-          label="Location"
-          name="location"
-          value={item.location}
-          onChange={handleChange}
-          disabled={!isEditing}
-        />
+      {/* Location Field */}
+      <TextField
+        margin="normal"
+        fullWidth
+        id="location"
+        label="Location"
+        name="location"
+        value={item.location}
+        onChange={handleChange}
+        disabled={!isEditing}
+      />
 
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-          <Button type="submit" variant="contained" sx={{ mr: 1 }}>
-            {isEditing ? 'Save Changes' : 'Edit'}
-          </Button>
-        </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+        <Button type="submit" variant="contained" sx={{ mr: 1 }}>
+          {isEditing ? 'Save Changes' : 'Edit'}
+        </Button>
       </Box>
+    </Box>
+    ) : (
+      <Box>
+        <Typography>
+          Name: {item.name}
+        </Typography>
+        <Typography>
+          Category: {item.category}
+        </Typography>
+
+      </Box>
+    )}
+      
       <Snackbar open={open} autoHideDuration={6000} onClose={closeSnackbar}>
         <Alert onClose={closeSnackbar} severity="success" sx={{ width: '100%' }}>
           {message}

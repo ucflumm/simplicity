@@ -13,7 +13,7 @@ import Adjustments from './Adjustments';
 // Import your route components
 // import ItemLibraryComponent from './ItemLibraryComponent';
 
-// import AdjustmentsComponent from './AdjustmentsComponent';
+
 
 
 const App = () => {
