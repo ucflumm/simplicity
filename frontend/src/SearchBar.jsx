@@ -1,33 +1,69 @@
-import React from 'react';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import React, { useState } from 'react';
 
-// Dummy data for the autocomplete options
-const searchOptions = [
-  { label: 'Option 1', id: 1 },
-  { label: 'Option 2', id: 2 },
-  { label: 'Option 3', id: 3 },
-  // Add more options as needed
-];
+const SearchComponent = () => {
+  const [searchTerm, setSearchTerm] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchType, setSearchType] = useState('name'); // default search type
 
-function SearchBar() {
-  // Placeholder for search logic
-  const handleSearch = (event, value) => {
-    // Implement your search logic here
-    // 'value' is the selected option from the autocomplete
-    console.log('Selected option:', value);
+  const handleInputChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+
+  const handleSearchTypeChange = (event) => {
+    setSearchType(event.target.value);
+  };
+
+  const handleSearch = async (event) => {
+    event.preventDefault();
+    const encodedSearchTerm = encodeURIComponent(searchTerm);
+    let apiUrl;
+
+    // Change the API URL based on the search type
+    if (searchType === 'upc') {
+      apiUrl = `https://your-api-url.com/api/item/upc/${encodedSearchTerm}`;
+    } else {
+      apiUrl = `https://your-api-url.com/api/item/search/${encodedSearchTerm}`;
+    }
+
+    try {
+      const response = await fetch(apiUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setSearchResults(data);
+    } catch (error) {
+      console.error('There was a problem with the fetch operation:', error);
+    }
   };
 
   return (
-    <Autocomplete
-      disablePortal
-      id="search-autocomplete"
-      options={searchOptions}
-      sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Search" />}
-      onChange={handleSearch} // Trigger search logic on selection
-    />
-  );
-}
+    <div>
+      <form onSubmit={handleSearch}>
+        {/* Dropdown for search type */}
+        <select value={searchType} onChange={handleSearchTypeChange}>
+          <option value="name">Name</option>
+          <option value="upc">UPC</option>
+        </select>
+        
+        {/* Search input */}
+        <input
+          type="text"
+          value={searchTerm}
+          onChange={handleInputChange}
+          placeholder={`Search by ${searchType.toUpperCase()}`}
+        />
+        <button type="submit">Search</button>
+      </form>
 
-export default SearchBar;
+      {/* Display search results */}
+      <ul>
+        {searchResults.map((item) => (
+          <li key={item.id}>{item.name} - {item.upc}</li>
+        ))}
+      </ul>
+    </div>
+  );
+};
+
+export default SearchComponent;
