@@ -12,10 +12,14 @@ import { Link } from 'react-router-dom';
 
 const NavItem = ({ icon, text, link, collapsed }) => {
   return (
-    <Box className={`nav-item ${collapsed ? 'collapsed' : ''}`}>
-      {icon}
-      <Link to={link} className={`nav-text ${collapsed ? 'hidden' : ''}`}>{text}</Link>
-    </Box>
+    // <Box className={`nav-item ${collapsed ? 'collapsed' : ''}`}>
+    //   {icon}
+    //   <Link to={link} className={`nav-text ${collapsed ? 'hidden' : ''}`}>{text}</Link>
+    // </Box>
+    <Link to={link} className={`nav-item ${collapsed ? 'collapsed' : ''}`}>
+    <Box className="icon">{icon}</Box>
+    <span className={`nav-text ${collapsed ? 'hidden' : ''}`}>{text}</span>
+  </Link>
   );
 }
 
