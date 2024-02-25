@@ -30,13 +30,16 @@ const App = () => {
           <Route path="/" element={
             <WhiteContainer>
               <ProductGrid />
-              <SearchBar />
+            </WhiteContainer>
+          } />
+          <Route path="/item-library" element={
+            <WhiteContainer>
+              <ProductGrid />
             </WhiteContainer>
           } />
           <Route path="/create-item" element={
             <WhiteContainer>
               <CreateItem />
-              
             </WhiteContainer>
           } />
           <Route path="/adjustments" element={
