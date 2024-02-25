@@ -6,7 +6,7 @@ const WhiteContainer = ({ children }) => {
   const { collapsed } = useSideNavState();
 
   const containerStyle = {
-    marginLeft: collapsed ? '80px' : '200px', // Adjust sizes as needed
+    marginLeft: collapsed ? '80px' : '210px', // Adjust sizes as needed
     transition: 'margin-left 0.5s ease',
     marginTop: '100px',
     // Other styles for your main container
