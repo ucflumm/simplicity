@@ -9,6 +9,10 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
         cb(null, uuidv4() + path.extname(file.originalname)); // UUID as filename
+    },
+    onError: (err, next) => {
+        console.log('Failed to write file', err);
+        next(err);
     }
 });
 

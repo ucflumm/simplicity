@@ -6,7 +6,7 @@
 
   // Create a new Item
   router.post("/", item.create);
-  router.post("/create-with-image", upload.single('image'), item.createWithImage);
+  router.post("/create-with-image", upload.single('file'), item.createWithImage);
   // Retrieve all Items
   router.get("/", item.findAll);
   // Retrieve a single Item with id
