@@ -14,6 +14,8 @@ app.use(cors(corsOptions));
 app.use(express.json());
 //parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+// image retrieval
+app.use('/img', express.static('uploads'));
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the application." });
