@@ -15,7 +15,6 @@ app.use(express.json());
 //parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 // image retrieval
-app.use('/img', express.static('uploads'));
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the application." });
@@ -36,6 +35,7 @@ db.mongoose
   });
 
 require("./app/routes/item.routes")(app);
+require("./app/routes/image.routes")(app);
 
 const PORT = process.env.PORT || 3030;
 app.listen(PORT, () => {

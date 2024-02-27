@@ -1,12 +1,11 @@
  module.exports = app => {
   const item = require("../controllers/item.controller.js");
-  const upload = require("../controllers/upload.controller.js");
 
   var router = require("express").Router();
 
   // Create a new Item
   router.post("/", item.create);
-  router.post("/create-with-image", upload.single('file'), item.createWithImage);
+  // router.post("/create-with-image", upload.single('file'), item.createWithImage);
   // Retrieve all Items
   router.get("/", item.findAll);
   // Retrieve a single Item with id
