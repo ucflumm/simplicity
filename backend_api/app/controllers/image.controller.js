@@ -4,6 +4,7 @@ const Item = db.items;
 const path = require("path");
 const fs = require("fs");
 const defaultPrice = 0;
+const sharp = require("sharp");
 
 exports.create = (req, res) => {
   // Your existing validations
@@ -54,9 +55,8 @@ exports.create = (req, res) => {
         quantity: req.body.quantity || 0,
         upc: req.body.upc,
         costPrice: req.body.costPrice || 0,
-        salePrice: req.body.salePrice || defaultPrice, // Ensure defaultPrice is defined
+        salePrice: req.body.salePrice || defaultPrice,
         location: req.body.location || "Unknown",
-        // imagePath will be added after saving the item
       });
 
       console.log("passed item creation");
@@ -77,14 +77,29 @@ exports.create = (req, res) => {
               if (err) {
                 console.error("File rename error: ", err);
                 res.status(500).send({
-                  message: "Error occurred while processing the image.",
+                  message: "Error occurred while renaming the image.",
                 });
                 return;
               }
-              // Optionally, update item with new image path
-              // This step requires additional logic to update the item in the database
             });
             console.log("passed file rename");
+            sharp(newPath)
+              .resize({
+                width: 300,
+                height: 300,
+                fit: sharp.fit.cover,
+                position: sharp.strategy.entropy,
+              })
+              .toFormat("jpeg", { quality: 90 })
+              .toFile(newPath, (err) => {
+                if (err) {
+                  console.error("Thumbnail creation error: ", err);
+                  res.status(500).send({
+                    message: "Error occurred while processing the image.",
+                  });
+                }
+              });
+            console.log("passed thumbnail creation");
           }
           res.send(item);
         })
@@ -101,3 +116,15 @@ exports.create = (req, res) => {
       });
     });
 };
+
+// exports.findImgById = (req, res) => {
+//   const id = req.params.id;
+//   if (!id) {
+//     res.status(400).send({ message: "ID cannot be empty!" });
+//   }
+//   const imagePath = path.join("uploads/", id + ".jpeg");
+
+//   fs.access(imagePath, fs.constants.F_OK, (err) => {
+//     if (err) {
+//       c
+//       // todo return;
