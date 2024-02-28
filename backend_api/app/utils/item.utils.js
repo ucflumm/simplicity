@@ -1,3 +1,6 @@
+const sharp = require("sharp");
+const fs = require("fs");
+
 function validateParams(param, value) {
   if (value === undefined || value === null) {
     return null;
@@ -28,5 +31,18 @@ function validateParams(param, value) {
   return null;
 }
 
-module.exports = validateParams;
+async function resizeFile(newPath) {
+  console.log("resizing file start function");
+  let buffer = await sharp(newPath)
+    .resize({
+      width: 300,
+      height: 300,
+      fit: sharp.fit.cover,
+      position: sharp.strategy.entropy,
+    })
+    .toFormat("jpeg", { quality: 90 })
+    .toBuffer();
+  return sharp(buffer).toFile(newPath);
+}
+module.exports = { validateParams, resizeFile };
 // Path: backend_api/app/controllers/item.controller.js
