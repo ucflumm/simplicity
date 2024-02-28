@@ -9,7 +9,7 @@ module.exports = (app) => {
   // Retrieve all Images
   //router.get("/", image.findAll);
   // Retrieve a single Image with id
-  // router.get("/id/:id", image.findOneById);
+  router.get("/id/:id", image.findImgById);
   // Retrieve a single Image with param and value
   //router.get("/param/:param/value/:value", image.findbyParams);
   // Update a Image with id by using the body of the request.

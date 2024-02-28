@@ -1,12 +1,13 @@
-const express = require('express');
-const cors = require('cors');
-const multer = require('multer');
-const sharp = require('sharp');
+const express = require("express");
+const cors = require("cors");
+const multer = require("multer");
+const sharp = require("sharp");
+const path = require("path");
 
 const app = express();
 //cors
 var corsOptions = {
-  origin: "http://localhost:3000"
+  origin: "http://localhost:3000",
 };
 
 app.use(cors(corsOptions));
@@ -15,6 +16,7 @@ app.use(express.json());
 //parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
 // image retrieval
+app.use(express.static("public"));
 
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to the application." });
@@ -24,12 +26,12 @@ const db = require("./app/models");
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Connected to the database!");
   })
-  .catch(err => {
+  .catch((err) => {
     console.log("Cannot connect to the database!", err);
     process.exit();
   });

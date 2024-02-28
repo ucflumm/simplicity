@@ -92,14 +92,28 @@ exports.create = async (req, res) => {
   }
 };
 
-// exports.findImgById = (req, res) => {
-//   const id = req.params.id;
-//   if (!id) {
-//     res.status(400).send({ message: "ID cannot be empty!" });
-//   }
-//   const imagePath = path.join("uploads/", id + ".jpeg");
+exports.findImgById = (req, res) => {
+  const id = req.params.id;
+  if (!id) {
+    res.status(400).send({ message: "ID cannot be empty!" });
+  }
+  const imagePath = path.join("/uploads", `${req.params.id}.jpg`);
+  console.log("Image path at start of imgId: ", imagePath);
 
-//   fs.access(imagePath, fs.constants.F_OK, (err) => {
-//     if (err) {
-//       c
-//       // todo return;
+  fs.access(imagePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.log("Image not found!", imagePath);
+      const defaultImagePath = path.join(
+        "/app",
+        "public",
+        "images",
+        "default.jpg"
+      );
+      console.log("Passed default image path");
+      res.sendFile(defaultImagePath);
+    } else {
+      console.log("Image found!");
+      res.sendFile(imagePath);
+    }
+  }); // Add closing parenthesis here
+};
