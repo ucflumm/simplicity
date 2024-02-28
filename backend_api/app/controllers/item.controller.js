@@ -1,7 +1,7 @@
 const db = require("../models");
 const Item = db.items;
 const defaultPrice = 0;
-const validateParams = require("../utils/item.utils");
+const { validateParams } = require("../utils/item.utils");
 /*
  * Crud operations for items, including create, retrieve, update, and delete.
  * We also have one huge function findByParams
@@ -59,6 +59,7 @@ exports.create = (req, res) => {
     req.body.upc = Math.floor(Math.random() * 1000000000);
   }
 
+  // double check this
   Item.findOne({ upc: req.body.upc })
     .then((data) => {
       if (data) {

@@ -94,26 +94,34 @@ exports.create = async (req, res) => {
 
 exports.findImgById = (req, res) => {
   const id = req.params.id;
-  if (!id) {
+  if (!id || id === "") {
     res.status(400).send({ message: "ID cannot be empty!" });
   }
-  const imagePath = path.join("/uploads", `${req.params.id}.jpg`);
+  const objId = req.params.id;
+  Item.findOne({ id: objId })
+    .then((data) => {
+      if (!data) {
+        res.status(404).send({ message: "Not found Item with id " + id });
+        return;
+      }
+    })
+    .catch(() => {
+      console.log("Error retrieving Item with id=" + id);
+      res.status(500).send({ message: "Error retrieving Item with id=" + id });
+      return;
+    });
+  const imagePath = path.join("uploads", `${req.params.id}.jpg`);
   console.log("Image path at start of imgId: ", imagePath);
 
   fs.access(imagePath, fs.constants.F_OK, (err) => {
     if (err) {
       console.log("Image not found!", imagePath);
-      const defaultImagePath = path.join(
-        "/app",
-        "public",
-        "images",
-        "default.jpg"
-      );
+      const defaultImagePath = path.join("public", "images", "default.jpg");
       console.log("Passed default image path");
-      res.sendFile(defaultImagePath);
+      res.sendFile(path.resolve(defaultImagePath));
     } else {
       console.log("Image found!");
-      res.sendFile(imagePath);
+      res.sendFile(path.resolve(imagePath));
     }
   }); // Add closing parenthesis here
 };
