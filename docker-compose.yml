@@ -17,6 +17,9 @@ services:
       - "3030:3030"
     depends_on:
       - mongodb
+    volumes:
+      - ./temp_uploads:/app/backend/temp_uploads
+      - ./uploads:/app/backend/uploads
 
   mongodb:
     image: mongo

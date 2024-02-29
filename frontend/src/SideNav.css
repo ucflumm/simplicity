@@ -115,3 +115,6 @@
   background-color: #000;
   /* Match the sidebar color */
 }
+a {
+  text-decoration: none ;
+}
