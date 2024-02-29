@@ -5,12 +5,15 @@
 
   // Create a new Item
   router.post("/", item.create);
+  // router.post("/create-with-image", upload.single('file'), item.createWithImage);
   // Retrieve all Items
   router.get("/", item.findAll);
   // Retrieve a single Item with id
   router.get("/id/:id", item.findOneById);
   // Retrieve a single Item with upc
   router.get("/upc/:upc", item.findOneByUPC);
+  // Search for regex match partial name or upc
+  router.get("/search/:search", item.findByNameContains);
   // Retrieve a single Item with param and value
   router.get("/param/:param/value/:value", item.findbyParams);
   //Find all zero quantity items
