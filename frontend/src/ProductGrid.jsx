@@ -24,8 +24,13 @@ const ProductList = () => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:3030/api/item');
-        setProducts(response.data);
-        setFilteredProducts(response.data); // Initialize filteredProducts with all products
+        const productsWithImages = await Promise.all(response.data.map(async (item) => {
+          const imageResponse = await axios.get(`http://localhost:3030/api/image/id/${item._id}`, { responseType: 'blob' });
+          const imageUrl = URL.createObjectURL(imageResponse.data);
+          return { ...item, imageUrl };
+        }));
+        setProducts(productsWithImages);
+        setFilteredProducts(productsWithImages); // Initialize filteredProducts with all products
       } catch (error) {
         console.error('There was an error fetching the products:', error);
       } finally {
