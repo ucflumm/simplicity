@@ -42,8 +42,9 @@ async function resizeFile(newPath) {
     })
     .toFormat("jpg", { quality: 90 })
     .toBuffer();
-  await sharp(buffer).toFile(outputFilePath);
-  await fs.promises.unlink(newPath);
+  await sharp(buffer).toFile(outputFilePath).then(
+    await fs.promises.unlink(newPath)
+  );
 }
 module.exports = { validateParams, resizeFile };
 // Path: backend_api/app/controllers/item.controller.js
