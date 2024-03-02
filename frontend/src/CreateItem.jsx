@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Snackbar, Alert, IconButton, Avatar } from '@mui/material';
+import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Snackbar, Alert, IconButton, Avatar, Grid } from '@mui/material';
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import axios from 'axios';
 import useSnackbar from './hooks/useSnackBar';
@@ -118,7 +118,10 @@ const CreateItem = () => {
 
   return (
     <>
+    
       <Box component="form" noValidate autoComplete="off" onSubmit={handleSubmit} encType="multipart/form-data">
+      <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
         <TextField
           margin="normal"
           fullWidth
@@ -147,6 +150,9 @@ const CreateItem = () => {
             <MenuItem value="Misc">Misc</MenuItem>
             <MenuItem value="Food">Food</MenuItem>
             <MenuItem value="Books">Books</MenuItem>
+            <MenuItem value="Toys">Toys</MenuItem>
+            <MenuItem value="Health">Health</MenuItem>
+            <MenuItem value="Beauty">Beauty</MenuItem>
           </Select>
           {errors.category && <FormHelperText>{errors.category}</FormHelperText>}
         </FormControl>
@@ -214,13 +220,17 @@ const CreateItem = () => {
           helperText={errors.location || ''}
           autoComplete="off"
         />
+        </Grid>
+        <Grid item xs={12} md={6} sx={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
         <label htmlFor="icon-button-file">
           <input accept="image/*" id="icon-button-file" type="file" name="file" onChange={handleChange} style={{ display: 'none' }} />
-          <IconButton color="primary" aria-label="upload picture" component="span">
-            <PhotoCamera />
-          </IconButton>
+          <Button color="primary" aria-label="upload picture" component="span" variant="contained" startIcon={<PhotoCamera />}>
+            Upload Photo
+          </Button>
         </label>
-        {preview && <Avatar src={preview} sx={{ width: 100, height: 100, mt: 2 }} />} {/* Added preview of the selected picture */}
+        {preview && <Avatar src={preview} sx={{ width: '500px', height: '500px', borderRadius: '5%', mt: 2}} />} {/* Added preview of the selected picture */}
+        </Grid>
+        </Grid>
         <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
           <Button type="submit" variant="contained" sx={{ mr: 1 }} disabled={!isFormValid}>
             Save
