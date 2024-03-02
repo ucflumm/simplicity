@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelperText, Box, Snackbar, Alert, Typography } from '@mui/material';
 import axios from 'axios';
 import useSnackbar from './hooks/useSnackBar';
 import EditIcon from '@mui/icons-material/Edit';
 
-const Adjustments = ({ upc }) => {
+const Adjustments = () => {
+  const { productId } = useParams(); // This will be the UPC from the URL
   const [item, setItem] = useState({
     name: '',
     category: '',
@@ -13,18 +15,19 @@ const Adjustments = ({ upc }) => {
     costPrice: 0,
     salePrice: 0,
     location: '',
+    file: null
   });
   const [isEditing, setIsEditing] = useState(false);
   const { open, message, showSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
-    // Fetch item details by UPC or name
-    fetchItemDetails();
-  }, []);
+    // Fetch item details by UPC
+    fetchItemDetails(productId); // Pass the UPC to the fetch function
+  }, [productId]);
 
-  const fetchItemDetails = async () => {
+  const fetchItemDetails = async (upc) => {
     try {
-      const response = await axios.get(`/api/item/upc/${upc}`);
+      const response = await axios.get(`http://localhost:3030/api/item/upc/${upc}`);
       setItem(response.data);
     } catch (error) {
       console.log('Error fetching item details:', error);
@@ -171,3 +174,4 @@ const Adjustments = ({ upc }) => {
 };
 
 export default Adjustments;
+
