@@ -69,7 +69,7 @@ const PreviewItem = ({ open, handleClose, item }) => {
           </Typography>
           <Box sx={{ display: 'flex', flexDirection: 'row' }}>
           <Button variant="contained" onClick={handleClose} sx={{ mt: 2, mr: 2 }}>Close</Button>
-          <Link to="/adjustments" style={{ textDecoration: 'none', mt: 2 }}>
+          <Link to={`/adjustments/${item.upc}`} style={{ textDecoration: 'none' }}>
             <Button variant="contained" sx={{ mt: 2 }}>Edit</Button>
           </Link>
           </Box>
