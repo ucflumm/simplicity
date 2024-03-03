@@ -39,14 +39,18 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
       return;
     }
 
-    if (item.file instanceof Blob) {
+    // Check if item.file is already a URL string (begins with "blob:" or "http")
+    if (typeof item.file === 'string' && (item.file.startsWith('blob:') || item.file.startsWith('http'))) {
+      setPreview(item.file);
+    } else if (item.file instanceof Blob) {
+      // If item.file is a Blob, convert it to a data URL for preview
       const fileReader = new FileReader();
       fileReader.onloadend = () => {
         setPreview(fileReader.result);
       };
       fileReader.readAsDataURL(item.file);
     } else {
-      console.error('The provided file is not a Blob.');
+      console.error('The provided file is neither a Blob nor a valid URL.');
     }
   }, [item.file]);
 
