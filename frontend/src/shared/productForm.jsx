@@ -3,6 +3,7 @@ import { TextField, Button, FormControl, InputLabel, Select, MenuItem, FormHelpe
 import PhotoCamera from '@mui/icons-material/PhotoCamera';
 import axios from 'axios';
 import useSnackbar from '../hooks/useSnackBar';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const DEFAULT_FORM = {
   name: '',
@@ -15,7 +16,8 @@ const DEFAULT_FORM = {
   file: null,
 };
 
-const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode, openSnackbar, closeSnackbar, snackbarMessage, snackbarOpen }) => {
+const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode, openSnackbar, closeSnackbar, snackbarMessage, snackbarOpen, originalItem = null }) => {
+  
   const [item, setItem] = useState(initialFormState);
   const [preview, setPreview] = useState(null);
   const [errors, setErrors] = useState({});
@@ -68,14 +70,29 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
       newErrors['category'] = 'Category is required';
     }
 
+    if (!item.quantity) {
+      formIsValid = false;
+      newErrors['quantity'] = 'Quantity must have a value';
+    }
+
     if (isNaN(item.quantity) || item.quantity < 0) {
       formIsValid = false;
       newErrors['quantity'] = 'Quantity must be a non-negative number';
     }
 
+    if (!item.costPrice) {
+      formIsValid = false;
+      newErrors['costPrice'] = 'Cost Price must have a value';
+    }
+
     if (isNaN(item.costPrice) || item.costPrice < 0) {
       formIsValid = false;
       newErrors['costPrice'] = 'Cost Price must be a non-negative number';
+    }
+
+    if (!item.salePrice) {
+      formIsValid = false;
+      newErrors['salePrice'] = 'Sale Price must have a value';
     }
 
     if (isNaN(item.salePrice) || item.salePrice < 0) {
@@ -92,6 +109,26 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
     setIsFormValid(formIsValid);
   };
 
+  const displayData = (key) => {
+    if (originalItem) {
+    if (item[key] != "" && originalItem[key] != item[key]) {
+      return (
+        <>
+          <Typography component="span" sx={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ textDecoration: 'line-through', color: 'red' }}>
+              {originalItem[key]}
+            </span>
+            <ArrowForwardIosIcon sx={{ fontSize: "1rem", mx: 0.5 }} />
+            <span>
+              {item[key]}
+            </span>
+          </Typography>
+        </>
+      )
+    }
+    }
+    return <Typography component="span">{item[key]}</Typography>
+  }
   const handleChange = (e) => {
     const { name, value, files } = e.target;
     if (name === "file") {
@@ -250,13 +287,13 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
               width: '100%'
             }}>
               <Avatar src={preview} sx={{ width: 256, height: 256, mb: 2 }} />
-              <Typography variant="body1" textAlign="center"><strong>Name:</strong> {item.name}</Typography>
-              <Typography variant="body1" textAlign="center"><strong>Category:</strong> {item.category}</Typography>
-              <Typography variant="body1" textAlign="center"><strong>UPC:</strong> {item.upc}</Typography>
-              <Typography variant="body1" textAlign="center"><strong>Quantity:</strong> {item.quantity}</Typography>
-              <Typography variant="body1" textAlign="center"><strong>Cost Price:</strong> ${item.costPrice}</Typography>
-              <Typography variant="body1" textAlign="center"><strong>Sale Price:</strong> ${item.salePrice}</Typography>
-              <Typography variant="body1" textAlign="center"><strong>Location:</strong> {item.location}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>Name:</strong> {displayData('name')}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>Category:</strong> {displayData('category')}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>UPC:</strong> {displayData('upc')}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>Quantity:</strong> {displayData('quantity')}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>Cost Price:</strong> {displayData('costPrice')}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>Sale Price:</strong> {displayData('salePrice')}</Typography>
+              <Typography variant="body1" textAlign="center"><strong>Location:</strong> {displayData('location')}</Typography>
             </Box>
           </Grid>
           <Grid item xs={12} md={6}>
@@ -296,6 +333,7 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
               </FormControl>
               <TextField
                 margin="normal"
+                required
                 fullWidth
                 id="quantity"
                 label="Quantity"
