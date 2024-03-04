@@ -27,3 +27,17 @@ services:
       - "27017:27017"
     volumes:
       - ./mongodb:/data/db
+
+  nginx_proxy_server:
+    :image: 'jc21/nginx-proxy-manager:latest'
+    restart: unless-stopped
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    environment:
+      DISABLE_IPV6: 'true'
+
+    volumes:
+      - ./nginx-proxy-manager:/data
+      - ./nginx-proxy-manager/letsencrypt:/etc/letsencrypt
