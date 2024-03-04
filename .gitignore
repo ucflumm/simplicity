@@ -24,3 +24,5 @@ mongo_db/
 *.interim
 >>>>>>> c2faf026499fc6074be7023df883e11a664c9621
 /uploads/*.jpg
+metrics.*
+WiredTiger*
