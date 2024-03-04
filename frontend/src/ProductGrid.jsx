@@ -13,19 +13,27 @@ import {
   Box
 } from '@mui/material';
 import SearchBar from './SearchBar'; // Import SearchBar component
+import PreviewItem from './previewItem'; // Import PreviewItem component for modal
 
 const ProductList = () => {
   const [products, setProducts] = useState([]); // State to store fetched products
   const [loading, setLoading] = useState(true); // State to handle loading state
   const [searchTerm, setSearchTerm] = useState(''); // State to handle search term
   const [filteredProducts, setFilteredProducts] = useState([]); // State to store filtered products
+  const [selectedProduct, setSelectedProduct] = useState(null); // State to store selected product for preview
+  const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://localhost:3030/api/item');
-        setProducts(response.data);
-        setFilteredProducts(response.data); // Initialize filteredProducts with all products
+        const productsWithImages = await Promise.all(response.data.map(async (item) => {
+          const imageResponse = await axios.get(`http://localhost:3030/api/image/id/${item._id}`, { responseType: 'blob' });
+          const imageUrl = URL.createObjectURL(imageResponse.data);
+          return { ...item, imageUrl };
+        }));
+        setProducts(productsWithImages);
+        setFilteredProducts(productsWithImages); // Initialize filteredProducts with all products
       } catch (error) {
         console.error('There was an error fetching the products:', error);
       } finally {
@@ -52,9 +60,14 @@ const ProductList = () => {
     filterProducts();
   }, [searchTerm, products]);
 
-  const handleProductClick = (productId) => {
-    // Logic for handling product click
-    console.log('Product clicked:', productId);
+  const handleProductClick = (product) => {
+    // Find the product by its ID and set it as the selected product
+    setSelectedProduct(product);
+    setIsModalOpen(true); // Open the modal to show the selected product
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); // Close the modal
   };
 
   return (
@@ -77,7 +90,7 @@ const ProductList = () => {
               <TableRow
                 key={product._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
-                onClick={() => handleProductClick(product._id)}
+                onClick={() => handleProductClick(product)}
               >
                 <TableCell component="th" scope="product" align="center">
                   <Box
@@ -97,9 +110,15 @@ const ProductList = () => {
           </TableBody>
         </Table>
       </TableContainer >
+      {selectedProduct && (
+        <PreviewItem
+          open={isModalOpen}
+          handleClose={handleCloseModal}
+          item={selectedProduct}
+        />
+      )}
     </>
   );
 };
 
 export default ProductList;
-

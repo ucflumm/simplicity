@@ -42,20 +42,11 @@ const App = () => {
               <CreateItem />
             </WhiteContainer>
           } />
-          <Route path="/adjustments" element={
+          <Route path="/adjustments/:productId" element={
             <WhiteContainer>
               <Adjustments />
             </WhiteContainer>
           } />
-          {/* <Route path="/item-library" element={
-            <WhiteContainer>
-              <ItemLibraryComponent />
-            </WhiteContainer>
-          } />
-          
-           
-          {/* Rest of your app */}
-          {/* Define more routes here */}
         </Routes>
       </div>
     </Router>
