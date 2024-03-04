@@ -16,6 +16,7 @@ const Adjustments = () => {
     location: '',
     file: null
   });
+  const [originalItem, setOriginalItem] = useState(null);
   const { open, message, showSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
@@ -27,6 +28,7 @@ const Adjustments = () => {
           const imageResponse = await axios.get(`http://localhost:3030/api/image/id/${response.data._id}`, { responseType: 'blob' });
           const imageUrl = URL.createObjectURL(imageResponse.data);
           setItem({ ...response.data, file: imageUrl });
+          setOriginalItem({ ...response.data, file: imageUrl });
         } else if (isMounted) { // Check if component is still mounted
           console.log('No item found with the given productId');
           showSnackbar('No item found.');
@@ -53,17 +55,18 @@ const Adjustments = () => {
 
   const handleSave = async (updatedItem) => {
     try {
-      const formData = new FormData();
-      Object.keys(updatedItem).forEach(key => {
-        formData.append(key, updatedItem[key]);
-      });
-
-      await axios.put(`http://localhost:3030/api/item/upc/${productId}`, formData, {
+      // const formData = new FormData();
+      // Object.keys(updatedItem).forEach(key => {
+      //   formData.append(key, updatedItem[key]);
+      // });
+// to update to take new api for multipart form
+      await axios.put(`http://localhost:3030/api/item/id/${item._id}`, updatedItem, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       });
       showSnackbar('Product details updated successfully.');
+    setOriginalItem({...originalItem, ...updatedItem});
     } catch (error) {
       console.log('Error updating item details:', error);
       showSnackbar('Failed to update item details.');
@@ -80,6 +83,7 @@ const Adjustments = () => {
       closeSnackbar={closeSnackbar}
       snackbarMessage={message}
       snackbarOpen={open}
+      originalItem={originalItem}
     />
   );
 };
