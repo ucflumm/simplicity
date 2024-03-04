@@ -32,7 +32,7 @@ function validateParams(param, value) {
 }
 
 async function resizeFile(newPath) {
-  console.log("resizing file start function");
+  const outputFilePath = newPath.replace(/\.[^/.]+$/, "") + ".jpg";
   let buffer = await sharp(newPath)
     .resize({
       width: 300,
@@ -40,9 +40,11 @@ async function resizeFile(newPath) {
       fit: sharp.fit.cover,
       position: sharp.strategy.entropy,
     })
-    .toFormat("jpeg", { quality: 90 })
+    .toFormat("jpg", { quality: 90 })
     .toBuffer();
-  return sharp(buffer).toFile(newPath);
+  await sharp(buffer).toFile(outputFilePath).then(
+    await fs.promises.unlink(newPath)
+  );
 }
 module.exports = { validateParams, resizeFile };
 // Path: backend_api/app/controllers/item.controller.js
