@@ -16,6 +16,7 @@ module.exports = (app) => {
   //router.put("/id/:id", image.update);
   // Delete a Image with id
   //router.delete("/id/:id", image.delete);
+  router.put("/id/:id", upload.single("file"), image.update);
 
   app.use("/api/image", router);
 };

@@ -131,3 +131,54 @@ exports.findImgById = async (req, res) => {
       .send({ message: "Error retrieving Item with id=" + id });
   }
 };
+
+exports.update = async (req, res) => {
+  try {
+    if (!req.body && !req.file) {
+      return res
+        .status(400)
+        .send({ message: "Data to update cannot be empty!" });
+    }
+
+    const id = req.params.id;
+    let updateData = req.body;
+
+    // If a file is uploaded, add its path to the update data
+    if (req.file) {
+      console.log("uploading file", req.file);
+      // Process the uploaded file
+      const tempPath = req.file.path;
+      const newFilename = id + path.extname(req.file.originalname);
+      const newPath = path.join("uploads/", newFilename);
+      console.log("oldPath: ", tempPath);
+      console.log("newPath: ", newPath);
+
+      await fs.promises.rename(tempPath, newPath);
+
+      console.log("passed file rename");
+
+      try {
+        await resizeFile(newPath);
+      } catch (err) {
+        console.log("Error resizing file: ", err);
+        res.status(500).send({ message: "Error resizing file!" });
+      }
+    }
+
+    const data = await Item.findByIdAndUpdate(id, updateData, {
+      new: true,
+      useFindAndModify: false,
+    });
+    if (!data) {
+      res.status(404).send({
+        message: `Cannot update item with id ${id}. Item not found!`,
+      });
+    } else {
+      res.send(data);
+    }
+  } catch (err) {
+    res
+      .status(500)
+      .send({ message: "An error occurred while updating the item." });
+  }
+};
