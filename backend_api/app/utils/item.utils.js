@@ -42,9 +42,27 @@ async function resizeFile(newPath) {
     })
     .toFormat("jpg", { quality: 90 })
     .toBuffer();
-  await sharp(buffer).toFile(outputFilePath).then(
-    await fs.promises.unlink(newPath)
-  );
+  await sharp(buffer)
+    .toFile(outputFilePath)
+    .then(await fs.promises.unlink(newPath));
 }
-module.exports = { validateParams, resizeFile };
-// Path: backend_api/app/controllers/item.controller.js
+
+const processFile = async (req, res, next) => {
+  if (req.file) {
+    const id = req.params.id || req.body._id; // Adapt based on your ID source
+    const tempPath = req.file.path;
+    const newFilename = id + path.extname(req.file.originalname);
+    const newPath = path.join("uploads/", newFilename);
+
+    try {
+      await fs.promises.rename(tempPath, newPath);
+      await resizeFile(newPath);
+      req.body.imagePath = newPath; // Add the image path to the request body for further processing
+    } catch (err) {
+      return res.status(500).send({ message: "Error processing file." });
+    }
+  }
+  next();
+};
+
+module.exports = { validateParams, resizeFile, processFile };
