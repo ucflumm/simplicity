@@ -1,5 +1,6 @@
 const sharp = require("sharp");
 const fs = require("fs");
+const path = require("path");
 
 function validateParams(param, value) {
   if (value === undefined || value === null) {
@@ -65,4 +66,37 @@ const processFile = async (req, res, next) => {
   next();
 };
 
-module.exports = { validateParams, resizeFile, processFile };
+const validateRequestBody = (req, res, next) => {
+  const validations = {
+    upc: req.body.upc,
+    quantity: req.body.quantity,
+    costPrice: req.body.costPrice,
+    salePrice: req.body.salePrice,
+    location: req.body.location,
+    category: req.body.category,
+  };
+
+  if (!req.body.name) {
+    return res.status(400).send({ message: "Name cannot be empty!" });
+  }
+
+  for (let [key, value] of Object.entries(validations)) {
+    const validationMessage = validateParams(key, value);
+    if (validationMessage) {
+      return res.status(400).send(validationMessage);
+    }
+  }
+
+  if (!req.body.upc) {
+    req.body.upc = Math.floor(Math.random() * 1000000000);
+  }
+
+  next();
+};
+
+module.exports = {
+  validateParams,
+  resizeFile,
+  processFile,
+  validateRequestBody,
+};
