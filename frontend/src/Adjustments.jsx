@@ -55,18 +55,18 @@ const Adjustments = () => {
 
   const handleSave = async (updatedItem) => {
     try {
-      // const formData = new FormData();
-      // Object.keys(updatedItem).forEach(key => {
-      //   formData.append(key, updatedItem[key]);
-      // });
-// to update to take new api for multipart form
-      await axios.put(`http://localhost:3030/api/item/id/${item._id}`, updatedItem, {
+      const formData = new FormData();
+      Object.keys(updatedItem).forEach(key => {
+        formData.append(key, updatedItem[key]);
+      });
+
+      await axios.put(`http://localhost:3030/api/image/id/${item._id}`, formData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data'
         }
       });
       showSnackbar('Product details updated successfully.');
-    setOriginalItem({...originalItem, ...updatedItem});
+      setOriginalItem({ ...originalItem, ...updatedItem });
     } catch (error) {
       console.log('Error updating item details:', error);
       showSnackbar('Failed to update item details.');
