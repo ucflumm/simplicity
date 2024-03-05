@@ -117,7 +117,7 @@ exports.findImgById = async (req, res) => {
     const imagePath = path.join("uploads", `${id}.jpg`);
     fs.access(imagePath, fs.constants.F_OK, (err) => {
       if (err) {
-        console.log("Image not found!", imagePath);
+        // For debuggin console.log("Image not found!", imagePath);
         const defaultImagePath = path.resolve(
           "public",
           "images",
@@ -125,7 +125,7 @@ exports.findImgById = async (req, res) => {
         );
         return res.sendFile(defaultImagePath);
       } else {
-        console.log("Image found!");
+        // For Debugging console.log("Image found!");
         return res.sendFile(path.resolve(imagePath));
       }
     });
