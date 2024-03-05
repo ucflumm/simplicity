@@ -3,7 +3,12 @@ const Item = db.items;
 const path = require("path");
 const fs = require("fs");
 const defaultPrice = 0;
-const { validateParams, resizeFile } = require("../utils/item.utils");
+const {
+  validateParams,
+  resizeFile,
+  processFile,
+  validateRequestBody,
+} = require("../utils/item.utils");
 
 exports.create = async (req, res) => {
   try {
@@ -112,7 +117,7 @@ exports.findImgById = async (req, res) => {
     const imagePath = path.join("uploads", `${id}.jpg`);
     fs.access(imagePath, fs.constants.F_OK, (err) => {
       if (err) {
-        console.log("Image not found!", imagePath);
+        // For debuggin console.log("Image not found!", imagePath);
         const defaultImagePath = path.resolve(
           "public",
           "images",
@@ -120,7 +125,7 @@ exports.findImgById = async (req, res) => {
         );
         return res.sendFile(defaultImagePath);
       } else {
-        console.log("Image found!");
+        // For Debugging console.log("Image found!");
         return res.sendFile(path.resolve(imagePath));
       }
     });
@@ -132,53 +137,26 @@ exports.findImgById = async (req, res) => {
   }
 };
 
-exports.update = async (req, res) => {
-  try {
-    if (!req.body && !req.file) {
-      return res
-        .status(400)
-        .send({ message: "Data to update cannot be empty!" });
-    }
-
-    const id = req.params.id;
-    let updateData = req.body;
-
-    // If a file is uploaded, add its path to the update data
-    if (req.file) {
-      console.log("uploading file", req.file);
-      // Process the uploaded file
-      const tempPath = req.file.path;
-      const newFilename = id + path.extname(req.file.originalname);
-      const newPath = path.join("uploads/", newFilename);
-      console.log("oldPath: ", tempPath);
-      console.log("newPath: ", newPath);
-
-      await fs.promises.rename(tempPath, newPath);
-
-      console.log("passed file rename");
-
-      try {
-        await resizeFile(newPath);
-      } catch (err) {
-        console.log("Error resizing file: ", err);
-        res.status(500).send({ message: "Error resizing file!" });
-      }
-    }
-
-    const data = await Item.findByIdAndUpdate(id, updateData, {
-      new: true,
-      useFindAndModify: false,
-    });
-    if (!data) {
-      res.status(404).send({
-        message: `Cannot update item with id ${id}. Item not found!`,
+exports.update = [
+  validateRequestBody,
+  processFile,
+  async (req, res) => {
+    const { id } = req.params;
+    try {
+      const updatedItem = await Item.findByIdAndUpdate(id, req.body, {
+        new: true,
+        useFindAndModify: false,
       });
-    } else {
-      res.send(data);
+      if (!updatedItem) {
+        return res.status(404).send({
+          message: `Cannot update item with id ${id}. Item not found!`,
+        });
+      }
+      res.send(updatedItem);
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: "An error occurred while updating the item." });
     }
-  } catch (err) {
-    res
-      .status(500)
-      .send({ message: "An error occurred while updating the item." });
-  }
-};
+  },
+];
