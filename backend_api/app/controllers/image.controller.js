@@ -3,7 +3,12 @@ const Item = db.items;
 const path = require("path");
 const fs = require("fs");
 const defaultPrice = 0;
-const { validateParams, resizeFile } = require("../utils/item.utils");
+const {
+  validateParams,
+  resizeFile,
+  processFile,
+  validateRequestBody,
+} = require("../utils/item.utils");
 
 exports.create = async (req, res) => {
   try {
