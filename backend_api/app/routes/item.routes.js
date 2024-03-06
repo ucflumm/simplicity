@@ -1,5 +1,6 @@
  module.exports = app => {
   const item = require("../controllers/item.controller.js");
+  const trackQuantityMiddleware = require("../utils/trackItemAdjustment.utils.js");
 
   var router = require("express").Router();
 
@@ -19,7 +20,7 @@
   //Find all zero quantity items
   router.get("/zero", item.findAllZeroQuantity);
   // Update a Item with id by using the body of the request.
-  router.put("/id/:id", item.update);
+  router.put("/id/:id", trackQuantityMiddleware, item.update);
   // Update a Item's quantity with id
   router.put("/id/:id/quantity/:quantity", item.updateQuantity);
   // Update a Param via id

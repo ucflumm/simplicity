@@ -1,15 +1,15 @@
 const mongoose = require("mongoose");
 
-const itemAdjustmentSchema = mongoose.Schema({
+const itemAdjustmentSchema = new mongoose.Schema({
   itemId: {
     type: mongoose.Schema.Types.ObjectId,
-    required: true,
     ref: "Item",
   },
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User", // Assuming you have a User model
+  upc: {
+    type: String,
+  },
+  user: {
+    type: String,
   },
   quantityChange: Number,
   description: String,
@@ -17,6 +17,14 @@ const itemAdjustmentSchema = mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+});
+
+// Custom validation to ensure either itemId or upc is provided
+itemAdjustmentSchema.pre("validate", function (next) {
+  if (!this.itemId && !this.upc) {
+    this.invalidate("itemId", "Either an itemId or a UPC must be provided.");
+  }
+  next();
 });
 
 const ItemAdjustment = mongoose.model("ItemAdjustment", itemAdjustmentSchema);
