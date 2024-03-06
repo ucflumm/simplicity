@@ -1,5 +1,6 @@
 const db = require("../models");
 const Item = db.items;
+const ItemAdjustment = db.itemAdjustments;
 const defaultPrice = 0;
 const { validateParams } = require("../utils/item.utils");
 /*
