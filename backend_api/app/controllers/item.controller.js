@@ -3,6 +3,7 @@ const Item = db.items;
 const ItemAdjustment = db.itemAdjustments;
 const defaultPrice = 0;
 const { validateParams } = require("../utils/item.utils");
+const { trackQuantityChange } = require("../utils/trackItemAdjustment.utils");
 /*
  * Crud operations for items, including create, retrieve, update, and delete.
  * We also have one huge function findByParams
@@ -116,24 +117,34 @@ exports.findbyParams = (req, res) => {
 };
 
 // Updates item by body of request
-exports.update = (req, res) => {
-  if (!req.body) {
-    return res.status(400).send({ message: "Data to update cannot be empty!" });
-  }
-  const id = req.params.id;
-  Item.findByIdAndUpdate(id, req.body, { new: true, useFindAndModify: false })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update item with id ${id}. Item not found!`,
-        });
-      } else {
-        res.send(data);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: "Error updating item with id " + id });
+exports.update = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    const updatedItem = await Item.findByIdAndUpdate(id, updateData, {
+      new: true,
+      useFindAndModify: false,
     });
+    if (!updatedItem) {
+      return res.status(404).send({ message: `Item with id ${id} not found.` });
+    }
+
+    // If there was a quantity change, record it
+    if (req.quantityChangeInfo) {
+      const { oldQuantity, newQuantity } = req.quantityChangeInfo;
+      await ItemAdjustment.create({
+        itemId: updatedItem._id,
+        userId: req.body.userId, // Assumes userId is provided in the request body. Adjust as necessary.
+        quantityChange: newQuantity - oldQuantity,
+        description: `Quantity changed from ${oldQuantity} to ${newQuantity} by user ${req.body.userId}`,
+      });
+    }
+
+    res.send(updatedItem);
+  } catch (error) {
+    res.status(500).send({ message: "Error updating item: " + error.message });
+  }
 };
 
 // this is technically a double up of update
@@ -191,34 +202,51 @@ exports.findAllZeroQuantity = (req, res) => {
     });
 };
 
-exports.updateQuantityByUPC = (req, res) => {
-  const upc = req.params.upc;
-  const quantity = req.params.quantity;
+exports.updateQuantityByUPC = async (req, res) => {
+  const { upc } = req.params;
+  const newQuantity = parseInt(req.params.quantity, 10);
+  let { user } = req.body; // Attempt to get user from the request body
 
-  if (isNaN(quantity) || quantity < 0) {
-    res
+  // Default the user to "mobile" if not provided
+  user = user || "mobile";
+
+  if (isNaN(newQuantity) || newQuantity < 0) {
+    return res
       .status(400)
       .send({ message: "Quantity must be equal or greater than zero!" });
-    return;
   }
 
-  Item.findOneAndUpdate(
-    { upc: upc },
-    { quantity: quantity },
-    { new: true, useFindAndModify: false }
-  )
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update item with upc ${upc}. Item not found!`,
-        });
-      } else {
-        res.send(data);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: "Error updating item with upc " + upc });
-    });
+  try {
+    // Fetch the current item by UPC to compare quantities
+    const currentItem = await Item.findOne({ upc: upc });
+    if (!currentItem) {
+      return res
+        .status(404)
+        .send({ message: "Item not found with UPC " + upc });
+    }
+
+    const oldQuantity = currentItem.quantity;
+
+    // Update the item's quantity
+    currentItem.quantity = newQuantity;
+    await currentItem.save();
+
+    // Record the quantity change, if any
+    if (oldQuantity !== newQuantity) {
+      await ItemAdjustment.create({
+        itemId: currentItem._id, // Now you have the item ID for tracking
+        userId: user, // User is either from the request or defaulted to "mobile"
+        quantityChange: newQuantity - oldQuantity,
+        description: `Quantity updated from ${oldQuantity} to ${newQuantity} for UPC ${upc} by ${user}`,
+      });
+    }
+
+    res.send({ message: `Quantity for UPC ${upc} updated successfully.` });
+  } catch (error) {
+    res
+      .status(500)
+      .send({ message: "Error updating item quantity: " + error.message });
+  }
 };
 
 exports.updateParamById = (req, res) => {
