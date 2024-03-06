@@ -61,7 +61,7 @@ This project was created by using REACT and Material UI.
 
 - Clone the repository:
   ```sh
-  git clone [repository-url]
+  git clone [https://github.com/ucflumm/simplicity.git]
   ```
 
 - Run Docker Compose:
@@ -92,13 +92,9 @@ This project was created by using REACT and Material UI.
 
 We welcome contributions from the community. Whether you're fixing bugs, adding new features, or improving documentation, please follow our contribution guidelines.
 
-## License
 
-This project is licensed under [LICENSE-NAME].
 
-## Contact Information
 
-For any additional questions or to join our team, please contact us at [contact@example.com].
 
 ## Acknowledgements
 
