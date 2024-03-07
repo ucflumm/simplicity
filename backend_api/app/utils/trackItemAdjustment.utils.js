@@ -1,9 +1,12 @@
 // utils/trackItemAdjustment.js
 const ItemAdjustment = require("../models/itemAdjustment.model");
+const Item = require("../models/item.model");
 
 const trackQuantityMiddleware = async (req, res, next) => {
+  console.log("Tracking item quantity change...");
   if (req.body.quantity !== undefined) {
     // Proceed only if quantity is being updated
+    console.log("Tracking item quantity change...");
     try {
       const currentItem = await Item.findById(req.params.id);
       if (!currentItem) {
@@ -21,6 +24,7 @@ const trackQuantityMiddleware = async (req, res, next) => {
         user: req.body.user, // Assuming this is how you identify the user
       };
     } catch (error) {
+      console.error("Error preparing item quantity change tracking:", error);
       return res
         .status(500)
         .send({ message: "Error preparing item quantity change tracking." });
@@ -28,3 +32,5 @@ const trackQuantityMiddleware = async (req, res, next) => {
   }
   next(); // Proceed to the actual request handler
 };
+
+module.exports = trackQuantityMiddleware;

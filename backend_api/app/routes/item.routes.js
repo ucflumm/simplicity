@@ -1,4 +1,4 @@
- module.exports = app => {
+module.exports = (app) => {
   const item = require("../controllers/item.controller.js");
   const trackQuantityMiddleware = require("../utils/trackItemAdjustment.utils.js");
 
@@ -26,11 +26,14 @@
   // Update a Param via id
   router.put("/id/:id/param/:param/value/:value", item.updateParamById);
   //update quantity via upc
-  router.put("/upc/:upc/quantity/:quantity", item.updateQuantityByUPC);
-
+  router.put(
+    "/upc/:upc/quantity/:quantity",
+    trackQuantityMiddleware,
+    item.updateQuantityByUPC
+  );
 
   // Delete a Item with id
   router.delete("/id/:id", item.delete);
 
-  app.use('/api/item', router);
-}
+  app.use("/api/item", router);
+};

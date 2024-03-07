@@ -18,3 +18,5 @@ const recordAdjustment = async ({
 
   await adjustment.save();
 };
+
+module.exports = { recordAdjustment };

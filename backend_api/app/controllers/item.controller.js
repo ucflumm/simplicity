@@ -1,9 +1,10 @@
 const db = require("../models");
 const Item = db.items;
-const ItemAdjustment = db.itemAdjustments;
 const defaultPrice = 0;
 const { validateParams } = require("../utils/item.utils");
 const { trackQuantityChange } = require("../utils/trackItemAdjustment.utils");
+const { ItemAdjustment } = require("../utils/adjustments.utils");
+const { recordAdjustment } = require("../utils/adjustments.utils");
 /*
  * Crud operations for items, including create, retrieve, update, and delete.
  * We also have one huge function findByParams
@@ -122,22 +123,34 @@ exports.update = async (req, res) => {
   const updateData = req.body;
 
   try {
+    // Fetch the current item state
+    const currentItem = await Item.findById(id);
+    if (!currentItem) {
+      return res.status(404).send({ message: `Item with id ${id} not found.` });
+    }
+
+    // Apply the update to the item
     const updatedItem = await Item.findByIdAndUpdate(id, updateData, {
       new: true,
       useFindAndModify: false,
     });
-    if (!updatedItem) {
-      return res.status(404).send({ message: `Item with id ${id} not found.` });
-    }
 
-    // If there was a quantity change, record it
-    if (req.quantityChangeInfo) {
-      const { oldQuantity, newQuantity } = req.quantityChangeInfo;
-      await ItemAdjustment.create({
+    // Assuming quantity is what we're interested in tracking
+    if (
+      "quantity" in updateData &&
+      currentItem.quantity !== updatedItem.quantity
+    ) {
+      // Calculate the change in quantity
+      const quantityChange = updatedItem.quantity - currentItem.quantity;
+
+      // Record the adjustment
+      await recordAdjustment({
         itemId: updatedItem._id,
-        userId: req.body.userId, // Assumes userId is provided in the request body. Adjust as necessary.
-        quantityChange: newQuantity - oldQuantity,
-        description: `Quantity changed from ${oldQuantity} to ${newQuantity} by user ${req.body.userId}`,
+        userId: req.body.userId || "defaultUser", // Default user if not provided
+        quantityChange,
+        description: `Quantity changed from ${currentItem.quantity} to ${
+          updatedItem.quantity
+        } by user ${req.body.userId || "defaultUser"}`,
       });
     }
 
