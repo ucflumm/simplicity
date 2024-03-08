@@ -1,12 +1,13 @@
-// utils/trackItemAdjustment.js
-const ItemAdjustment = require("../models/itemAdjustment.model");
-const Item = require("../models/item.model");
-
 const trackQuantityMiddleware = async (req, res, next) => {
   console.log("Tracking item quantity change...");
-  if (req.body.quantity !== undefined) {
+  console.log("req.body", req.body);
+  if (req.body.quantity && req.params.quantity === undefined) {
     // Proceed only if quantity is being updated
-    console.log("Tracking item quantity change...");
+    const quantity = parseInt(req.body.quantity, 10);
+    if (isNaN(quantity) || quantity < 0) {
+      console.log("Tracking item quantity change...");
+      req.body.quantity = quantity;
+    }
     try {
       const currentItem = await Item.findById(req.params.id);
       if (!currentItem) {

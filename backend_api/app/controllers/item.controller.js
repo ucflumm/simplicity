@@ -246,9 +246,10 @@ exports.updateQuantityByUPC = async (req, res) => {
 
     // Record the quantity change, if any
     if (oldQuantity !== newQuantity) {
-      await ItemAdjustment.create({
+      await recordAdjustment({
         itemId: currentItem._id, // Now you have the item ID for tracking
-        userId: user, // User is either from the request or defaulted to "mobile"
+        upc,
+        user,
         quantityChange: newQuantity - oldQuantity,
         description: `Quantity updated from ${oldQuantity} to ${newQuantity} for UPC ${upc} by ${user}`,
       });
@@ -256,6 +257,7 @@ exports.updateQuantityByUPC = async (req, res) => {
 
     res.send({ message: `Quantity for UPC ${upc} updated successfully.` });
   } catch (error) {
+    console.error("Error updating item quantity:", error);
     res
       .status(500)
       .send({ message: "Error updating item quantity: " + error.message });
