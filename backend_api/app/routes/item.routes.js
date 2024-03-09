@@ -1,6 +1,7 @@
 module.exports = (app) => {
   const item = require("../controllers/item.controller.js");
   const trackQuantityMiddleware = require("../utils/trackItemAdjustment.utils.js");
+  const adjustments = require("../controllers/adjustments.controller.js");
 
   var router = require("express").Router();
 
@@ -9,6 +10,8 @@ module.exports = (app) => {
   // router.post("/create-with-image", upload.single('file'), item.createWithImage);
   // Retrieve all Items
   router.get("/", item.findAll);
+  // Retrieve tracking details
+  router.get("/query", adjustments.getAllAdjustments);
   // Retrieve a single Item with id
   router.get("/id/:id", item.findOneById);
   // Retrieve a single Item with upc

@@ -1,3 +1,5 @@
+const Item = require("../models/item.model");
+
 const trackQuantityMiddleware = async (req, res, next) => {
   console.log("Tracking item quantity change...");
   console.log("req.body", req.body);
@@ -13,9 +15,13 @@ const trackQuantityMiddleware = async (req, res, next) => {
       if (!currentItem) {
         return res.status(404).send({ message: "Item not found." });
       }
-
+      console.log("currentItem past await :", currentItem);
+      console.log("currentItem.quantity :", currentItem.quantity);
+      console.log("req.body.quantity :", req.body.quantity);
       const oldQuantity = currentItem.quantity;
       const newQuantity = req.body.quantity;
+      console.log("req.params.id :", req.params.id);
+      console.log(req.body.user);
 
       // Attach data to req for later use, avoiding another DB fetch
       req.itemQuantityChange = {
