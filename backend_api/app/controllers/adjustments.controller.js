@@ -38,7 +38,7 @@ exports.getAllAdjustmentsByItemId = async (req, res) => {
   const { id } = req.params;
   console.log("Querying adjustments for item Id:", id);
   try {
-    const adjustments = await ItemAdjustment.find({ id: itemId }).sort({
+    const adjustments = await ItemAdjustment.find({ itemId: id }).sort({
       timestamp: -1,
     });
     if (!adjustments.length) {
