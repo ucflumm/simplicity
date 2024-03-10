@@ -144,13 +144,12 @@ exports.update = async (req, res) => {
       const quantityChange = updatedItem.quantity - currentItem.quantity;
 
       // Record the adjustment
+      console.log("User ID:", req.body.userId);
       await recordAdjustment({
         itemId: updatedItem._id,
-        userId: req.body.userId || "defaultUser", // Default user if not provided
+        user: req.body.userId || "defaultUser", // Default user if not provided
         quantityChange,
-        description: `Quantity changed from ${currentItem.quantity} to ${
-          updatedItem.quantity
-        } by user ${req.body.userId || "defaultUser"}`,
+        description: `Quantity changed from ${currentItem.quantity} to ${updatedItem.quantity} for item "${currentItem.name}" by user ${req.body.user}`,
       });
     }
 
@@ -239,7 +238,7 @@ exports.updateQuantityByUPC = async (req, res) => {
     }
 
     const oldQuantity = currentItem.quantity;
-
+    const itemName = currentItem.name;
     // Update the item's quantity
     currentItem.quantity = newQuantity;
     await currentItem.save();
@@ -251,7 +250,7 @@ exports.updateQuantityByUPC = async (req, res) => {
         upc,
         user,
         quantityChange: newQuantity - oldQuantity,
-        description: `Quantity updated from ${oldQuantity} to ${newQuantity} for UPC ${upc} by ${user}`,
+        description: `Quantity updated from ${oldQuantity} to ${newQuantity} for "${itemName}" (UPC: ${upc}) by ${user}`,
       });
     }
 
