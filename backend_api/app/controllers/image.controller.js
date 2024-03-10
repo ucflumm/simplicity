@@ -3,7 +3,12 @@ const Item = db.items;
 const path = require("path");
 const fs = require("fs");
 const defaultPrice = 0;
-const { validateParams, resizeFile } = require("../utils/item.utils");
+const {
+  validateParams,
+  resizeFile,
+  processFile,
+  validateRequestBody,
+} = require("../utils/item.utils");
 
 exports.create = async (req, res) => {
   try {
@@ -112,7 +117,7 @@ exports.findImgById = async (req, res) => {
     const imagePath = path.join("uploads", `${id}.jpg`);
     fs.access(imagePath, fs.constants.F_OK, (err) => {
       if (err) {
-        console.log("Image not found!", imagePath);
+        // For debuggin console.log("Image not found!", imagePath);
         const defaultImagePath = path.resolve(
           "public",
           "images",
@@ -120,7 +125,7 @@ exports.findImgById = async (req, res) => {
         );
         return res.sendFile(defaultImagePath);
       } else {
-        console.log("Image found!");
+        // For Debugging console.log("Image found!");
         return res.sendFile(path.resolve(imagePath));
       }
     });
@@ -131,3 +136,27 @@ exports.findImgById = async (req, res) => {
       .send({ message: "Error retrieving Item with id=" + id });
   }
 };
+
+exports.update = [
+  validateRequestBody,
+  processFile,
+  async (req, res) => {
+    const { id } = req.params;
+    try {
+      const updatedItem = await Item.findByIdAndUpdate(id, req.body, {
+        new: true,
+        useFindAndModify: false,
+      });
+      if (!updatedItem) {
+        return res.status(404).send({
+          message: `Cannot update item with id ${id}. Item not found!`,
+        });
+      }
+      res.send(updatedItem);
+    } catch (err) {
+      res
+        .status(500)
+        .send({ message: "An error occurred while updating the item." });
+    }
+  },
+];
