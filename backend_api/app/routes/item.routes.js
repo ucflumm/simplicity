@@ -12,6 +12,8 @@ module.exports = (app) => {
   router.get("/", item.findAll);
   // Retrieve tracking details
   router.get("/query", adjustments.getAllAdjustments);
+  // Retrieve adjustments by id
+  router.get("/query/id/:id", adjustments.getAllAdjustmentsByItemId);
   // Retrieve a single Item with id
   router.get("/id/:id", item.findOneById);
   // Retrieve a single Item with upc

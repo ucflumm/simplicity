@@ -173,10 +173,11 @@ exports.update = [
 
       // If there's a change in quantity, use recordAdjustment to record it
       if (newQuantity !== undefined && oldQuantity !== newQuantity) {
-        const user = req.body.user || "defaultUser"; // Default to "defaultUser" if no user is specified
+        const user = req.body.user || "Default User"; // Default to "defaultUser" if no user is specified
         await recordAdjustment({
           itemId: updatedItem._id,
           user: user,
+          upc: updatedItem.upc,
           quantityChange: newQuantity - oldQuantity,
           description: `Quantity changed from ${oldQuantity} to ${newQuantity} for item ${itemName} by ${user}`,
         });
