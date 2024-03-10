@@ -10,29 +10,30 @@ exports.getAllAdjustments = async (req, res) => {
   }
 };
 
-exports.getAdjustmentById = async (req, res) => {
-  const { id } = req.params;
+// Not Used
+// exports.getAdjustmentById = async (req, res) => {
+//   const { id } = req.params;
 
-  try {
-    const adjustment = await ItemAdjustment.findById(id)
-      .populate("itemId", "name") // Assuming 'itemId' is the reference in ItemAdjustment schema
-      .exec();
+//   try {
+//     const adjustment = await ItemAdjustment.findById(id)
+//       .populate("itemId", "name") // Assuming 'itemId' is the reference in ItemAdjustment schema
+//       .exec();
 
-    if (!adjustment) {
-      return res.status(404).send({ message: "Adjustment not found." });
-    }
+//     if (!adjustment) {
+//       return res.status(404).send({ message: "Adjustment not found." });
+//     }
 
-    // Send the adjustment along with the item name
-    // Note: adjustment.itemId.name will contain the item name due to .populate()
-    res.send({
-      ...adjustment.toJSON(),
-      itemName: adjustment.itemId.name, // Add the item name explicitly
-    });
-  } catch (error) {
-    console.error("Error fetching adjustment:", error);
-    res.status(500).send({ message: "Error fetching adjustment details." });
-  }
-};
+//     // Send the adjustment along with the item name
+//     // Note: adjustment.itemId.name will contain the item name due to .populate()
+//     res.send({
+//       ...adjustment.toJSON(),
+//       itemName: adjustment.itemId.name, // Add the item name explicitly
+//     });
+//   } catch (error) {
+//     console.error("Error fetching adjustment:", error);
+//     res.status(500).send({ message: "Error fetching adjustment details." });
+//   }
+// };
 
 exports.getAllAdjustmentsByItemId = async (req, res) => {
   const { id } = req.params;
