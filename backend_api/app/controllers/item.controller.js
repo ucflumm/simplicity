@@ -154,7 +154,7 @@ exports.update = async (req, res) => {
       });
     }
 
-    res.send(updatedItem);
+    res.status(200).send(updatedItem);
   } catch (error) {
     res.status(500).send({ message: "Error updating item: " + error.message });
   }
@@ -206,7 +206,9 @@ exports.deleteItemAndAssociations = async (req, res) => {
       });
     }
 
-    res.send({ message: "Item and all associated data deleted successfully." });
+    res
+      .status(200)
+      .send({ message: "Item and all associated data deleted successfully." });
   } catch (error) {
     console.error("Error deleting item and associations:", error);
     res.status(500).send({ message: "Error deleting item and associations." });
