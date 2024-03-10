@@ -14,13 +14,11 @@ const DEFAULT_FORM = {
   file: null,
 }
 
-
 const CreateItem = () => {
   const [item, setItem] = useState(DEFAULT_FORM);
   const { showSnackbar, closeSnackbar, open, message } = useSnackbar();
 
   const handleSubmit = async (item) => {
-    console.log(process.env.REACT_APP_BASE_URL);
     console.log('Form is valid', item);
     const formData = new FormData();
     Object.keys(item).forEach(key => {
@@ -31,7 +29,6 @@ const CreateItem = () => {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      
     })
       .then(response => {
         console.log(response.data);
