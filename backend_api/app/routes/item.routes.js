@@ -38,7 +38,7 @@ module.exports = (app) => {
   );
 
   // Delete a Item with id
-  router.delete("/id/:id", item.delete);
+  router.delete("/id/:id", item.deleteItemAndAssociations);
 
   app.use("/api/item", router);
 };

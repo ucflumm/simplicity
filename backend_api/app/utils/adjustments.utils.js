@@ -19,4 +19,4 @@ const recordAdjustment = async ({
   await adjustment.save();
 };
 
-module.exports = { recordAdjustment };
+module.exports = { recordAdjustment, ItemAdjustment };

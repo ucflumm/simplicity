@@ -3,8 +3,9 @@ const Item = db.items;
 const defaultPrice = 0;
 const { validateParams } = require("../utils/item.utils");
 const { trackQuantityChange } = require("../utils/trackItemAdjustment.utils");
-const { ItemAdjustment } = require("../utils/adjustments.utils");
+const ItemAdjustment = require("../models/itemAdjustment.model");
 const { recordAdjustment } = require("../utils/adjustments.utils");
+
 /*
  * Crud operations for items, including create, retrieve, update, and delete.
  * We also have one huge function findByParams
@@ -182,23 +183,34 @@ exports.updateQuantity = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
+exports.deleteItemAndAssociations = async (req, res) => {
   const id = req.params.id;
-  Item.findByIdAndDelete(id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot delete item with id ${id}. Item not found!`,
-        });
-      } else {
-        res.send({ message: "Item deleted successfully." });
-      }
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: err || "Could not delete item with id " + id });
-    });
+  console.log("Deleting item with id:", id);
+  console.log("Deleting history first:", id);
+
+  await ItemAdjustment.deleteMany({ itemId: id });
+
+  try {
+    const item = await Item.findByIdAndDelete(id);
+    if (!item) {
+      return res.status(404).send({ message: `Item with id ${id} not found.` });
+    }
+
+    // image delete
+    if (item.imagePath) {
+      const imagePath = path.resolve(item.imagePath);
+      await fs.unlink(imagePath).catch((err) => {
+        console.error("Error deleting image file:", err);
+        // Note: Decide how you want to handle file deletion errors.
+        // You might not want to return or stop the process here.
+      });
+    }
+
+    res.send({ message: "Item and all associated data deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting item and associations:", error);
+    res.status(500).send({ message: "Error deleting item and associations." });
+  }
 };
 
 // This needs some testing when there are no items and items are added all have positive quantities
