@@ -239,6 +239,11 @@ exports.updateQuantityByUPC = async (req, res) => {
 
     const oldQuantity = currentItem.quantity;
     const itemName = currentItem.name;
+    if (oldQuantity === newQuantity) {
+      return res.status(400).send({
+        message: `Quantity for UPC ${upc} is already ${newQuantity}.`,
+      });
+    }
     // Update the item's quantity
     currentItem.quantity = newQuantity;
     await currentItem.save();
