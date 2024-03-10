@@ -26,9 +26,9 @@ const ProductList = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3030/api/item');
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/item`);
         const productsWithImages = await Promise.all(response.data.map(async (item) => {
-          const imageResponse = await axios.get(`http://localhost:3030/api/image/id/${item._id}`, { responseType: 'blob' });
+          const imageResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/image/id/${item._id}`, { responseType: 'blob' });
           const imageUrl = URL.createObjectURL(imageResponse.data);
           return { ...item, imageUrl };
         }));

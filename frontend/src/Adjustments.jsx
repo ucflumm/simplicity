@@ -62,11 +62,11 @@ const Adjustments = () => {
 
       await axios.put(`http://localhost:3030/api/image/id/${item._id}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       });
       showSnackbar('Product details updated successfully.');
-      setOriginalItem({ ...originalItem, ...updatedItem });
+    setOriginalItem({...originalItem, ...updatedItem});
     } catch (error) {
       console.log('Error updating item details:', error);
       showSnackbar('Failed to update item details.');
