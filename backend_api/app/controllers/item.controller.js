@@ -150,6 +150,7 @@ exports.update = async (req, res) => {
         itemId: updatedItem._id,
         user: req.body.userId || "defaultUser", // Default user if not provided
         quantityChange,
+        name: updatedItem.name,
         description: `Quantity changed from ${currentItem.quantity} to ${updatedItem.quantity} for item "${currentItem.name}" by user ${req.body.user}`,
       });
     }
