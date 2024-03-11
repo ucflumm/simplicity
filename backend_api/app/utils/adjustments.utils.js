@@ -5,6 +5,7 @@ const recordAdjustment = async ({
   itemId,
   upc,
   user,
+  name,
   quantityChange,
   description,
 }) => {
@@ -12,6 +13,7 @@ const recordAdjustment = async ({
     itemId,
     upc,
     user,
+    name,
     quantityChange,
     description,
   });
