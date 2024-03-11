@@ -236,7 +236,7 @@ exports.updateQuantityByUPC = async (req, res) => {
   let { user } = req.body; // Attempt to get user from the request body
 
   // Default the user to "mobile" if not provided
-  user = user || "mobile";
+  user = user || "Android-Client";
 
   if (isNaN(newQuantity) || newQuantity < 0) {
     return res
