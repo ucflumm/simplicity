@@ -18,7 +18,8 @@ const Adjustments = () => {
     costPrice: 0,
     salePrice: 0,
     location: '',
-    file: null
+    file: null,
+    user: 'Web-Client'
   });
   const [originalItem, setOriginalItem] = useState(null);
   const { open, message, showSnackbar, closeSnackbar } = useSnackbar();
@@ -87,15 +88,18 @@ const Adjustments = () => {
       Object.keys(updatedItem).forEach(key => {
         formData.append(key, updatedItem[key]);
       });
+      // Define the user key beforehand as instructed
+      const user = "Web-Client"; // Assuming "Web-Client" is the predefined user
+      formData.append('user', user);
 
       await axios.put(`${process.env.REACT_APP_BASE_URL}/api/image/id/${item._id}`, formData, {
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'multipart/form-data' // Changed to 'multipart/form-data' to correctly handle FormData
         }
       });
       showSnackbar('Product details updated successfully.');
       fetchHistory();
-      setOriginalItem({ ...originalItem, ...updatedItem });
+      setOriginalItem({ ...originalItem, ...updatedItem, user }); // Include the 'user' key in the originalItem update
     } catch (error) {
       console.log('Error updating item details:', error);
       showSnackbar('Failed to update item details.');
