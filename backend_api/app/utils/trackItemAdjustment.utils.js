@@ -27,6 +27,7 @@ const trackQuantityMiddleware = async (req, res, next) => {
       req.itemQuantityChange = {
         oldQuantity,
         newQuantity,
+        name: currentItem.name,
         itemId: req.params.id,
         user: req.body.user, // Assuming this is how you identify the user
       };

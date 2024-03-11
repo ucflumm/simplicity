@@ -143,7 +143,8 @@ exports.update = async (req, res) => {
     ) {
       // Calculate the change in quantity
       const quantityChange = updatedItem.quantity - currentItem.quantity;
-
+      const name = updatedItem.name;
+      console.log("Name:", name);
       // Record the adjustment
       console.log("User ID:", req.body.userId);
       await recordAdjustment({
@@ -269,6 +270,7 @@ exports.updateQuantityByUPC = async (req, res) => {
         itemId: currentItem._id, // Now you have the item ID for tracking
         upc,
         user,
+        name: currentItem.name,
         quantityChange: newQuantity - oldQuantity,
         description: `Quantity updated from ${oldQuantity} to ${newQuantity} for "${itemName}" (UPC: ${upc}) by ${user}`,
       });

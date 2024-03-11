@@ -178,6 +178,7 @@ exports.update = [
           itemId: updatedItem._id,
           user: user,
           upc: updatedItem.upc,
+          name: updatedItem.name,
           quantityChange: newQuantity - oldQuantity,
           description: `Quantity changed from ${oldQuantity} to ${newQuantity} for item ${itemName} by ${user}`,
         });
