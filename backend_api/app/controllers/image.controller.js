@@ -1,5 +1,6 @@
 const db = require("../models");
 const Item = db.items;
+const { recordAdjustment } = require("../utils/adjustments.utils");
 const path = require("path");
 const fs = require("fs");
 const defaultPrice = 0;
@@ -143,17 +144,48 @@ exports.update = [
   async (req, res) => {
     const { id } = req.params;
     try {
-      const updatedItem = await Item.findByIdAndUpdate(id, req.body, {
-        new: true,
-        useFindAndModify: false,
-      });
-      if (!updatedItem) {
+      // Fetch current item state before update
+      const currentItem = await Item.findById(id);
+      if (!currentItem) {
         return res.status(404).send({
           message: `Cannot update item with id ${id}. Item not found!`,
         });
       }
+      // debug log console.log("old item: ", currentItem);
+      // debug log console.log("old item quantity: ", currentItem.quantity);
+      // debug log console.log("new item: ", req.body);
+      // debug log console.log("new item quantity: ", req.body.quantity);
+      const oldQuantity = currentItem.quantity;
+      const newQuantity = Number(req.body.quantity);
+      if (oldQuantity === newQuantity) {
+        // debug log console.log("Quantity did not change. No update necessary.");
+        return res.status(400).send({
+          message: "Quantity did not change. No update necessary.",
+        });
+      }
+      const itemName = currentItem.name;
+
+      // Update the item with the new data
+      const updatedItem = await Item.findByIdAndUpdate(id, req.body, {
+        new: true,
+        useFindAndModify: false,
+      });
+
+      // If there's a change in quantity, use recordAdjustment to record it
+      if (newQuantity !== undefined && oldQuantity !== newQuantity) {
+        const user = req.body.user || "Default User"; // Default to "defaultUser" if no user is specified
+        await recordAdjustment({
+          itemId: updatedItem._id,
+          user: user,
+          upc: updatedItem.upc,
+          quantityChange: newQuantity - oldQuantity,
+          description: `Quantity changed from ${oldQuantity} to ${newQuantity} for item ${itemName} by ${user}`,
+        });
+      }
+
       res.send(updatedItem);
     } catch (err) {
+      console.error("Update error:", err);
       res
         .status(500)
         .send({ message: "An error occurred while updating the item." });

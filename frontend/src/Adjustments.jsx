@@ -90,7 +90,7 @@ const Adjustments = () => {
 
       await axios.put(`${process.env.REACT_APP_BASE_URL}/api/image/id/${item._id}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'application/json'
         }
       });
       showSnackbar('Product details updated successfully.');

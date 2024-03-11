@@ -1,13 +1,13 @@
+// models/index.js
 const dbConfig = require("../config/db.config.js");
-
 const mongoose = require("mongoose");
 mongoose.Promise = global.Promise;
 
-const db = {};
-
-db.mongoose = mongoose;
-db.url = dbConfig.url;
-
-db.items = require("./item.model.js")(mongoose);
+const db = {
+  mongoose: mongoose,
+  url: dbConfig.url,
+  items: require("./item.model.js"), // Adjusted to require directly
+  itemAdjustments: require("./itemAdjustment.model.js"),
+};
 
 module.exports = db;
