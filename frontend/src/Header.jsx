@@ -17,7 +17,7 @@ const Header = () => {
       <h3 className="title">Simplicity</h3>
       </div>
       <div className="right-container-top">
-      <button onClick={handleLoginClick} className="login-button">Log In</button>
+      {/* <button onClick={handleLoginClick} className="login-button">Log In</button> */}
       </div>
     </div>
   );
