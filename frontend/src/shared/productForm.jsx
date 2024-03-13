@@ -70,30 +70,30 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
       newErrors['category'] = 'Category is required';
     }
 
-    if (!item.quantity) {
-      formIsValid = false;
-      newErrors['quantity'] = 'Quantity must have a value';
-    }
+    // if (!item.quantity) {
+    //   formIsValid = false;
+    //   newErrors['quantity'] = 'Quantity must have a value';
+    // }
 
     if (isNaN(item.quantity) || item.quantity < 0) {
       formIsValid = false;
       newErrors['quantity'] = 'Quantity must be a non-negative number';
     }
 
-    if (!item.costPrice) {
-      formIsValid = false;
-      newErrors['costPrice'] = 'Cost Price must have a value';
-    }
+    // if (!item.costPrice) {
+    //   formIsValid = false;
+    //   newErrors['costPrice'] = 'Cost Price must have a value';
+    // }
 
     if (isNaN(item.costPrice) || item.costPrice < 0) {
       formIsValid = false;
       newErrors['costPrice'] = 'Cost Price must be a non-negative number';
     }
 
-    if (!item.salePrice) {
-      formIsValid = false;
-      newErrors['salePrice'] = 'Sale Price must have a value';
-    }
+    // if (!item.salePrice) {
+    //   formIsValid = false;
+    //   newErrors['salePrice'] = 'Sale Price must have a value';
+    // }
 
     if (isNaN(item.salePrice) || item.salePrice < 0) {
       formIsValid = false;
