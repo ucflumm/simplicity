@@ -11,7 +11,8 @@ import {
   Paper,
   Typography,
   Box,
-  IconButton // Import IconButton from MUI for sort button
+  IconButton, // Import IconButton from MUI for sort button
+  CircularProgress // Import CircularProgress for loading indicator
 } from '@mui/material';
 import SearchBar from './SearchBar'; // Import SearchBar component
 import PreviewItem from './previewItem'; // Import PreviewItem component for modal
@@ -42,7 +43,7 @@ const ProductList = () => {
     } finally {
       setLoading(false); // Ensure loading is set to false after fetch
     }
-  }, []);
+  }, []); 
 
   useEffect(() => {
     fetchProducts();
@@ -84,6 +85,10 @@ const ProductList = () => {
     setFilteredProducts(sortedProducts);
   };
 
+  if (loading) {
+    return <CircularProgress color="secondary" style={{ color: 'purple' }} />;
+  }
+
   return (
     <>
       <SearchBar setSearchTerm={setSearchTerm} />
@@ -107,27 +112,33 @@ const ProductList = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredProducts.map((product) => (
-              <TableRow
-                key={product._id}
-                sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
-                onClick={() => handleProductClick(product)}
-              >
-                <TableCell component="th" scope="product" align="center">
-                  <Box
-                    component="img"
-                    src={product.imageUrl}
-                    alt={product.name}
-                    sx={{ width: 50, height: 50, borderRadius: '5%' }}
-                  />
-                </TableCell>
-                <TableCell align="center"><Typography className="itemValue">{product.name}</Typography></TableCell>
-                <TableCell align="center"><Typography className="itemValue">{product.upc}</Typography></TableCell>
-                <TableCell align="center"><Typography className="itemValue">{product.quantity}</Typography></TableCell>
-                <TableCell align="center"><Typography className="itemValue">{product.category}</Typography></TableCell>
-                <TableCell align="center"><Typography className="itemValue">${product.salePrice}</Typography></TableCell>
+            {filteredProducts.length > 0 ? (
+              filteredProducts.map((product) => (
+                <TableRow
+                  key={product._id}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+                  onClick={() => handleProductClick(product)}
+                >
+                  <TableCell component="th" scope="product" align="center">
+                    <Box
+                      component="img"
+                      src={product.imageUrl}
+                      alt={product.name}
+                      sx={{ width: 50, height: 50, borderRadius: '5%' }}
+                    />
+                  </TableCell>
+                  <TableCell align="center"><Typography className="itemValue">{product.name}</Typography></TableCell>
+                  <TableCell align="center"><Typography className="itemValue">{product.upc}</Typography></TableCell>
+                  <TableCell align="center"><Typography className="itemValue">{product.quantity}</Typography></TableCell>
+                  <TableCell align="center"><Typography className="itemValue">{product.category}</Typography></TableCell>
+                  <TableCell align="center"><Typography className="itemValue">${product.salePrice}</Typography></TableCell>
+                </TableRow>
+              ))
+            ) : (
+              <TableRow>
+                <TableCell colSpan={6} align="center">No products found</TableCell>
               </TableRow>
-            ))}
+            )}
           </TableBody>
         </Table>
       </TableContainer >
