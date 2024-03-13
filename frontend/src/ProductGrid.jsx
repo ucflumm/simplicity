@@ -10,10 +10,13 @@ import {
   TableRow,
   Paper,
   Typography,
-  Box
+  Box,
+  IconButton // Import IconButton from MUI for sort button
 } from '@mui/material';
 import SearchBar from './SearchBar'; // Import SearchBar component
 import PreviewItem from './previewItem'; // Import PreviewItem component for modal
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'; // Import ArrowUpward icon for ascending sort
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; // Import ArrowDownward icon for descending sort
 
 const ProductList = () => {
   const [products, setProducts] = useState([]); // State to store fetched products
@@ -22,6 +25,7 @@ const ProductList = () => {
   const [filteredProducts, setFilteredProducts] = useState([]); // State to store filtered products
   const [selectedProduct, setSelectedProduct] = useState(null); // State to store selected product for preview
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
+  const [sortOrder, setSortOrder] = useState('desc'); // State to control sort order
 
   const fetchProducts = useCallback(async () => {
     try {
@@ -70,6 +74,16 @@ const ProductList = () => {
     setIsModalOpen(false); // Close the modal
   };
 
+  // Function to toggle sort order and sort products by quantity
+  const toggleSortOrder = () => {
+    const newSortOrder = sortOrder === 'desc' ? 'asc' : 'desc';
+    setSortOrder(newSortOrder);
+    const sortedProducts = [...filteredProducts].sort((a, b) => {
+      return newSortOrder === 'desc' ? b.quantity - a.quantity : a.quantity - b.quantity;
+    });
+    setFilteredProducts(sortedProducts);
+  };
+
   return (
     <>
       <SearchBar setSearchTerm={setSearchTerm} />
@@ -80,7 +94,14 @@ const ProductList = () => {
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Image</Typography></TableCell>
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Name</Typography></TableCell>
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>UPC</Typography></TableCell>
-              <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Quantity</Typography></TableCell>
+              <TableCell align="center">
+                <Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000", display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  Quantity
+                  <IconButton onClick={toggleSortOrder} size="small">
+                    {sortOrder === 'desc' ? <ArrowDownwardIcon /> : <ArrowUpwardIcon />}
+                  </IconButton>
+                </Typography>
+              </TableCell>
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Category</Typography></TableCell>
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Sell Price</Typography></TableCell>
             </TableRow>
