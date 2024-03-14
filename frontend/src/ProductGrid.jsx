@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './ProductGrid.css';
 import axios from 'axios';
 import {
@@ -23,26 +23,26 @@ const ProductList = () => {
   const [selectedProduct, setSelectedProduct] = useState(null); // State to store selected product for preview
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get('http://localhost:3030/api/item');
-        const productsWithImages = await Promise.all(response.data.map(async (item) => {
-          const imageResponse = await axios.get(`http://localhost:3030/api/image/id/${item._id}`, { responseType: 'blob' });
-          const imageUrl = URL.createObjectURL(imageResponse.data);
-          return { ...item, imageUrl };
-        }));
-        setProducts(productsWithImages);
-        setFilteredProducts(productsWithImages); // Initialize filteredProducts with all products
-      } catch (error) {
-        console.error('There was an error fetching the products:', error);
-      } finally {
-        setLoading(false); // Ensure loading is set to false after fetch
-      }
-    };
-
-    fetchProducts();
+  const fetchProducts = useCallback(async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/item`);
+      const productsWithImages = await Promise.all(response.data.map(async (item) => {
+        const imageResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/image/id/${item._id}`, { responseType: 'blob' });
+        const imageUrl = URL.createObjectURL(imageResponse.data);
+        return { ...item, imageUrl };
+      }));
+      setProducts(productsWithImages);
+      setFilteredProducts(productsWithImages); // Initialize filteredProducts with all products
+    } catch (error) {
+      console.error('There was an error fetching the products:', error);
+    } finally {
+      setLoading(false); // Ensure loading is set to false after fetch
+    }
   }, []);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   useEffect(() => {
     const filterProducts = () => {

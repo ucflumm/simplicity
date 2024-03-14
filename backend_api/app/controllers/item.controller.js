@@ -2,6 +2,10 @@ const db = require("../models");
 const Item = db.items;
 const defaultPrice = 0;
 const { validateParams } = require("../utils/item.utils");
+const { trackQuantityChange } = require("../utils/trackItemAdjustment.utils");
+const ItemAdjustment = require("../models/itemAdjustment.model");
+const { recordAdjustment } = require("../utils/adjustments.utils");
+
 /*
  * Crud operations for items, including create, retrieve, update, and delete.
  * We also have one huge function findByParams
@@ -115,24 +119,47 @@ exports.findbyParams = (req, res) => {
 };
 
 // Updates item by body of request
-exports.update = (req, res) => {
-  if (!req.body) {
-    return res.status(400).send({ message: "Data to update cannot be empty!" });
-  }
-  const id = req.params.id;
-  Item.findByIdAndUpdate(id, req.body, { new: true, useFindAndModify: false })
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update item with id ${id}. Item not found!`,
-        });
-      } else {
-        res.send(data);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: "Error updating item with id " + id });
+exports.update = async (req, res) => {
+  const { id } = req.params;
+  const updateData = req.body;
+
+  try {
+    // Fetch the current item state
+    const currentItem = await Item.findById(id);
+    if (!currentItem) {
+      return res.status(404).send({ message: `Item with id ${id} not found.` });
+    }
+
+    // Apply the update to the item
+    const updatedItem = await Item.findByIdAndUpdate(id, updateData, {
+      new: true,
+      useFindAndModify: false,
     });
+
+    // Assuming quantity is what we're interested in tracking
+    if (
+      "quantity" in updateData &&
+      currentItem.quantity !== updatedItem.quantity
+    ) {
+      // Calculate the change in quantity
+      const quantityChange = updatedItem.quantity - currentItem.quantity;
+      const name = updatedItem.name;
+      console.log("Name:", name);
+      // Record the adjustment
+      console.log("User ID:", req.body.userId);
+      await recordAdjustment({
+        itemId: updatedItem._id,
+        user: req.body.userId || "defaultUser", // Default user if not provided
+        quantityChange,
+        name: updatedItem.name,
+        description: `Quantity changed from ${currentItem.quantity} to ${updatedItem.quantity} for item "${currentItem.name}" by user ${req.body.user}`,
+      });
+    }
+
+    res.status(200).send(updatedItem);
+  } catch (error) {
+    res.status(500).send({ message: "Error updating item: " + error.message });
+  }
 };
 
 // this is technically a double up of update
@@ -158,23 +185,36 @@ exports.updateQuantity = (req, res) => {
     });
 };
 
-exports.delete = (req, res) => {
+exports.deleteItemAndAssociations = async (req, res) => {
   const id = req.params.id;
-  Item.findByIdAndDelete(id)
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot delete item with id ${id}. Item not found!`,
-        });
-      } else {
-        res.send({ message: "Item deleted successfully." });
-      }
-    })
-    .catch((err) => {
-      res
-        .status(500)
-        .send({ message: err || "Could not delete item with id " + id });
-    });
+  console.log("Deleting item with id:", id);
+  console.log("Deleting history first:", id);
+
+  await ItemAdjustment.deleteMany({ itemId: id });
+
+  try {
+    const item = await Item.findByIdAndDelete(id);
+    if (!item) {
+      return res.status(404).send({ message: `Item with id ${id} not found.` });
+    }
+
+    // image delete
+    if (item.imagePath) {
+      const imagePath = path.resolve(item.imagePath);
+      await fs.unlink(imagePath).catch((err) => {
+        console.error("Error deleting image file:", err);
+        // Note: Decide how you want to handle file deletion errors.
+        // You might not want to return or stop the process here.
+      });
+    }
+
+    res
+      .status(200)
+      .send({ message: "Item and all associated data deleted successfully." });
+  } catch (error) {
+    console.error("Error deleting item and associations:", error);
+    res.status(500).send({ message: "Error deleting item and associations." });
+  }
 };
 
 // This needs some testing when there are no items and items are added all have positive quantities
@@ -190,34 +230,59 @@ exports.findAllZeroQuantity = (req, res) => {
     });
 };
 
-exports.updateQuantityByUPC = (req, res) => {
-  const upc = req.params.upc;
-  const quantity = req.params.quantity;
+exports.updateQuantityByUPC = async (req, res) => {
+  const { upc } = req.params;
+  const newQuantity = parseInt(req.params.quantity, 10);
+  let { user } = req.body; // Attempt to get user from the request body
 
-  if (isNaN(quantity) || quantity < 0) {
-    res
+  // Default the user to "mobile" if not provided
+  user = user || "Android-Client";
+
+  if (isNaN(newQuantity) || newQuantity < 0) {
+    return res
       .status(400)
       .send({ message: "Quantity must be equal or greater than zero!" });
-    return;
   }
 
-  Item.findOneAndUpdate(
-    { upc: upc },
-    { quantity: quantity },
-    { new: true, useFindAndModify: false }
-  )
-    .then((data) => {
-      if (!data) {
-        res.status(404).send({
-          message: `Cannot update item with upc ${upc}. Item not found!`,
-        });
-      } else {
-        res.send(data);
-      }
-    })
-    .catch((err) => {
-      res.status(500).send({ message: "Error updating item with upc " + upc });
-    });
+  try {
+    // Fetch the current item by UPC to compare quantities
+    const currentItem = await Item.findOne({ upc: upc });
+    if (!currentItem) {
+      return res
+        .status(404)
+        .send({ message: "Item not found with UPC " + upc });
+    }
+
+    const oldQuantity = currentItem.quantity;
+    const itemName = currentItem.name;
+    if (oldQuantity === newQuantity) {
+      return res.status(400).send({
+        message: `Quantity for UPC ${upc} is already ${newQuantity}.`,
+      });
+    }
+    // Update the item's quantity
+    currentItem.quantity = newQuantity;
+    await currentItem.save();
+
+    // Record the quantity change, if any
+    if (oldQuantity !== newQuantity) {
+      await recordAdjustment({
+        itemId: currentItem._id, // Now you have the item ID for tracking
+        upc,
+        user,
+        name: currentItem.name,
+        quantityChange: newQuantity - oldQuantity,
+        description: `Quantity updated from ${oldQuantity} to ${newQuantity} for "${itemName}" (UPC: ${upc}) by ${user}`,
+      });
+    }
+
+    res.send({ message: `Quantity for UPC ${upc} updated successfully.` });
+  } catch (error) {
+    console.error("Error updating item quantity:", error);
+    res
+      .status(500)
+      .send({ message: "Error updating item quantity: " + error.message });
+  }
 };
 
 exports.updateParamById = (req, res) => {

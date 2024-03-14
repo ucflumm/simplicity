@@ -1,70 +1,107 @@
-# Getting Started with Create React App
+# Simplicity - Inventory Management Simplified
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## About Simplicity
 
-## Available Scripts
+Simplicity is a robust, yet easy-to-use inventory management system tailored specifically for small to medium-sized businesses, as well as burgeoning home businesses preparing to take their first step into the world of inventory. Our platform offers a straightforward interface, intuitive controls, and detailed analytics to empower businesses to maintain optimum levels of inventory, reduce costs, and avoid the pitfalls of overstocking or stockouts.
 
-In the project directory, you can run:
+With a focus on user experience, Simplicity seamlessly integrates with your existing workflows, making the transition to digital inventory management a breeze. From tracking products and orders to managing suppliers and stock levels, Simplicity is the one-stop solution for all your inventory needs.
 
-### `npm start`
+## Key Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **User-Friendly Interface**: Designed with simplicity in mind, our dashboard provides quick access to all key functions.
+- **Analytics & Reporting**: Get insights into your inventory trends to make informed decisions.
+- **Multi-Platform Access**: Whether you're at the office or on the go, keep your inventory at your fingertips.
+- **Scalability**: As your business grows, Simplicity grows with you, handling increased demand with ease.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Technologies Used
 
-### `npm test`
+This project is built using modern web technologies and libraries that ensure fast, secure, and efficient operations.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+This project was created by using REACT and Material UI.
 
-### `npm run build`
+```json
+"dependencies": {
+    "@emotion/react": "^11.11.3",
+    "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.15.9",
+    "@mui/material": "^5.15.10",
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router-dom": "^6.22.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+},
+"devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+}
+```
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Quick Start Guide
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Requirements
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+- Docker
+  Install Docker and Docker Compose:
+  ```sh
+  sudo apt install docker docker-compose
+  sudo apt install docker-compose
+  ```
 
-### `npm run eject`
+### To Run
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Set up the project directory:
+  ```sh
+  mkdir simplicity
+  cd simplicity
+  ```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+- Clone the repository:
+  ```sh
+  git clone [https://github.com/ucflumm/simplicity.git]
+  ```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Run Docker Compose:
+  ```sh
+  docker compose up
+  ```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+### Container Rebuild
 
-## Learn More
+- In case of updates breaking the container:
+  ```sh
+  docker-compose up --build --force-recreate --no-deps backend
+  docker-compose up --build --force-recreate --no-deps frontend
+  ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+### Ports and Services
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **API**: Backend API runs on port `3030`.
+- **Frontend**: React app runs on port `3000`.
+- **MongoDB**:
+  - Runs on port `27017`.
+  - Mounted to `./mongodb` for persistent storage.
+  - Contains some dummy data for testing purposes.
 
-### Code Splitting
+> **Note**: Dummy data should not be pulled in production deployments.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Contributing
 
-### Analyzing the Bundle Size
+We welcome contributions from the community. Whether you're fixing bugs, adding new features, or improving documentation, please follow our contribution guidelines.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+## Acknowledgements
 
-### Deployment
+We want to thank everyone who has contributed to the development of Simplicity, including all our dependents and supporters who have made this journey possible.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+---
 
-### `npm run build` fails to minify
+For more details on how to interact with React, refer to the [official React documentation](https://reactjs.org/docs/getting-started.html).
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
