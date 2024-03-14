@@ -1,5 +1,6 @@
 const sharp = require("sharp");
 const fs = require("fs");
+const path = require("path");
 
 function validateParams(param, value) {
   if (value === undefined || value === null) {
@@ -42,9 +43,60 @@ async function resizeFile(newPath) {
     })
     .toFormat("jpg", { quality: 90 })
     .toBuffer();
-  await sharp(buffer).toFile(outputFilePath).then(
-    await fs.promises.unlink(newPath)
-  );
+  await sharp(buffer)
+    .toFile(outputFilePath)
+    .then(await fs.promises.unlink(newPath));
 }
-module.exports = { validateParams, resizeFile };
-// Path: backend_api/app/controllers/item.controller.js
+
+const processFile = async (req, res, next) => {
+  if (req.file) {
+    const id = req.params.id || req.body._id; // Adapt based on your ID source
+    const tempPath = req.file.path;
+    const newFilename = id + path.extname(req.file.originalname);
+    const newPath = path.join("uploads/", newFilename);
+
+    try {
+      await fs.promises.rename(tempPath, newPath);
+      await resizeFile(newPath);
+      req.body.imagePath = newPath; // Add the image path to the request body for further processing
+    } catch (err) {
+      return res.status(500).send({ message: "Error processing file." });
+    }
+  }
+  next();
+};
+
+const validateRequestBody = (req, res, next) => {
+  const validations = {
+    upc: req.body.upc,
+    quantity: req.body.quantity,
+    costPrice: req.body.costPrice,
+    salePrice: req.body.salePrice,
+    location: req.body.location,
+    category: req.body.category,
+  };
+
+  if (!req.body.name) {
+    return res.status(400).send({ message: "Name cannot be empty!" });
+  }
+
+  for (let [key, value] of Object.entries(validations)) {
+    const validationMessage = validateParams(key, value);
+    if (validationMessage) {
+      return res.status(400).send(validationMessage);
+    }
+  }
+
+  if (!req.body.upc) {
+    req.body.upc = Math.floor(Math.random() * 1000000000);
+  }
+
+  next();
+};
+
+module.exports = {
+  validateParams,
+  resizeFile,
+  processFile,
+  validateRequestBody,
+};

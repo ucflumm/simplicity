@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useParams, useNavigate } from 'react-router-dom'; // Added useNavigate for navigation
 import axios from 'axios';
 import ProductForm from './shared/productForm'; // Corrected the import path to match the case sensitivity
 import useSnackbar from './hooks/useSnackBar';
+import { Button, Box } from '@mui/material'; // Import Button from MUI for the back button
+import HistoryTable from './HistoryTable';
 
 const Adjustments = () => {
   const { productId } = useParams(); // This will be the UPC from the URL
+  const navigate = useNavigate(); // Hook for navigation
+  const [history, setHistory] = useState([]); // state for history adjs
   const [item, setItem] = useState({
     name: '',
     category: '',
@@ -14,38 +18,65 @@ const Adjustments = () => {
     costPrice: 0,
     salePrice: 0,
     location: '',
-    file: null
+    file: null,
+    user: 'Web-Client'
   });
+  const [originalItem, setOriginalItem] = useState(null);
   const { open, message, showSnackbar, closeSnackbar } = useSnackbar();
 
   useEffect(() => {
-    let isMounted = true; // Flag to check component mount status
+    let isMounted = true;
     const fetchItemDetails = async () => {
       try {
-        const response = await axios.get(`http://localhost:3030/api/item/upc/${productId}`);
-        if (response.data && isMounted) { // Check if component is still mounted
-          const imageResponse = await axios.get(`http://localhost:3030/api/image/id/${response.data._id}`, { responseType: 'blob' });
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/item/upc/${productId}`);
+        if (response.data && isMounted) {
+          const imageResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/image/id/${response.data._id}`, { responseType: 'blob' });
           const imageUrl = URL.createObjectURL(imageResponse.data);
           setItem({ ...response.data, file: imageUrl });
-        } else if (isMounted) { // Check if component is still mounted
+          setOriginalItem({ ...response.data, file: imageUrl });
+        } else if (isMounted) {
           console.log('No item found with the given productId');
           showSnackbar('No item found.');
         }
       } catch (error) {
-        if (isMounted) { // Check if component is still mounted
+        if (isMounted) {
           console.log('Error fetching item details:', error);
           showSnackbar('Failed to fetch item details.');
         }
       }
     };
 
-    console.log("Fetching ...");
     fetchItemDetails();
 
     return () => {
-      isMounted = false; // Set flag to false when component unmounts
+      isMounted = false;
     };
   }, [productId, showSnackbar]);
+
+  const fetchHistory = useCallback(async () => {
+    let isMounted = true;
+    try {
+      if (item._id && item._id !== '') {
+        const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/item/query/id/${item._id}`); //update endpoint
+        if (response.data && isMounted) {
+          setHistory(response.data);
+        } else if (isMounted) {
+          console.log('No item found with the given productId');
+        }
+      }
+    } catch (error) {
+      if (isMounted) {
+        console.error('Error fetching history:', error);
+      }
+    }
+    return () => {
+      isMounted = false;
+    };
+  }, [item._id]);
+
+  useEffect(() => {
+    fetchHistory();
+  }, [fetchHistory]);
 
   const handleChange = (updatedItem) => {
     setItem(updatedItem);
@@ -57,30 +88,47 @@ const Adjustments = () => {
       Object.keys(updatedItem).forEach(key => {
         formData.append(key, updatedItem[key]);
       });
+      // Define the user key beforehand as instructed
+      const user = "Web-Client"; // Assuming "Web-Client" is the predefined user
+      formData.append('user', user);
 
-      await axios.put(`http://localhost:3030/api/item/upc/${productId}`, formData, {
+      await axios.put(`${process.env.REACT_APP_BASE_URL}/api/image/id/${item._id}`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
+          'Content-Type': 'multipart/form-data' // Changed to 'multipart/form-data' to correctly handle FormData
         }
       });
       showSnackbar('Product details updated successfully.');
+      fetchHistory();
+      setOriginalItem({ ...originalItem, ...updatedItem, user }); // Include the 'user' key in the originalItem update
     } catch (error) {
       console.log('Error updating item details:', error);
       showSnackbar('Failed to update item details.');
     }
   };
 
+  // Function to handle back navigation
+  const handleBack = () => {
+    navigate(-1); // Navigate back to the previous page
+  };
+
   return (
-    <ProductForm
-      initialFormState={item}
-      onSubmit={handleSave}
-      onChange={handleChange}
-      mode="adjust"
-      openSnackbar={showSnackbar}
-      closeSnackbar={closeSnackbar}
-      snackbarMessage={message}
-      snackbarOpen={open}
-    />
+    <>
+      <Button variant="contained" onClick={handleBack} style={{ marginBottom: '20px' }}>Back</Button> {/* Back button */}
+      <ProductForm
+        initialFormState={item}
+        onSubmit={handleSave}
+        onChange={handleChange}
+        mode="adjust"
+        openSnackbar={showSnackbar}
+        closeSnackbar={closeSnackbar}
+        snackbarMessage={message}
+        snackbarOpen={open}
+        originalItem={originalItem}
+      />
+      <Box sx={{ marginTop: '56px' }}>
+        <HistoryTable historyArray={history} />
+      </Box>
+    </>
   );
 };
 

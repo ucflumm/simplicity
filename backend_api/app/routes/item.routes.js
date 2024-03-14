@@ -1,5 +1,7 @@
- module.exports = app => {
+module.exports = (app) => {
   const item = require("../controllers/item.controller.js");
+  const trackQuantityMiddleware = require("../utils/trackItemAdjustment.utils.js");
+  const adjustments = require("../controllers/adjustments.controller.js");
 
   var router = require("express").Router();
 
@@ -8,6 +10,10 @@
   // router.post("/create-with-image", upload.single('file'), item.createWithImage);
   // Retrieve all Items
   router.get("/", item.findAll);
+  // Retrieve tracking details
+  router.get("/query", adjustments.getAllAdjustments);
+  // Retrieve adjustments by id
+  router.get("/query/id/:id", adjustments.getAllAdjustmentsByItemId);
   // Retrieve a single Item with id
   router.get("/id/:id", item.findOneById);
   // Retrieve a single Item with upc
@@ -19,17 +25,20 @@
   //Find all zero quantity items
   router.get("/zero", item.findAllZeroQuantity);
   // Update a Item with id by using the body of the request.
-  router.put("/id/:id", item.update);
+  router.put("/id/:id", trackQuantityMiddleware, item.update);
   // Update a Item's quantity with id
   router.put("/id/:id/quantity/:quantity", item.updateQuantity);
   // Update a Param via id
   router.put("/id/:id/param/:param/value/:value", item.updateParamById);
   //update quantity via upc
-  router.put("/upc/:upc/quantity/:quantity", item.updateQuantityByUPC);
-
+  router.put(
+    "/upc/:upc/quantity/:quantity",
+    trackQuantityMiddleware,
+    item.updateQuantityByUPC
+  );
 
   // Delete a Item with id
-  router.delete("/id/:id", item.delete);
+  router.delete("/id/:id", item.deleteItemAndAssociations);
 
-  app.use('/api/item', router);
-}
+  app.use("/api/item", router);
+};
