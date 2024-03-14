@@ -40,7 +40,6 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
       setPreview(null);
       return;
     }
-
     // Check if item.file is already a URL string (begins with "blob:" or "http")
     if (typeof item.file === 'string' && (item.file.startsWith('blob:') || item.file.startsWith('http'))) {
       setPreview(item.file);
@@ -56,6 +55,7 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
     }
   }, [item.file]);
 
+
   const validateForm = () => {
     let formIsValid = true;
     let newErrors = {};
@@ -70,10 +70,12 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
       newErrors['category'] = 'Category is required';
     }
 
-    // if (!item.quantity) {
-    //   formIsValid = false;
-    //   newErrors['quantity'] = 'Quantity must have a value';
-    // }
+    if (originalItem) {
+      if (originalItem.quantity == item.quantity) {
+        formIsValid = false;
+        newErrors['quantity'] = 'Quantity must have a different value than the actual value';
+      }
+    }
 
     if (isNaN(item.quantity) || item.quantity < 0) {
       formIsValid = false;
