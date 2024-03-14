@@ -1,0 +1,3 @@
+[14/Mar/2024:08:11:21 +0000] - - 502 - GET http localhost "/favicon.ico" [Client 172.19.0.1] [Length 556] [Gzip -] [Sent-to localhost] "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" "http://localhost/"
+[14/Mar/2024:08:11:24 +0000] - - 502 - GET http localhost "/" [Client 172.19.0.1] [Length 556] [Gzip -] [Sent-to localhost] "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" "-"
+[14/Mar/2024:08:11:24 +0000] - - 502 - GET http localhost "/favicon.ico" [Client 172.19.0.1] [Length 556] [Gzip -] [Sent-to localhost] "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36" "http://localhost/"
