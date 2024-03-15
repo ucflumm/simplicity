@@ -34,6 +34,7 @@ const ProductList = () => {
       setProducts(productsWithImages);
       setFilteredProducts(productsWithImages); // Initialize filteredProducts with all products
     } catch (error) {
+      console.log(process.env.REACT_APP_BASE_URL)
       console.error('There was an error fetching the products:', error);
     } finally {
       setLoading(false); // Ensure loading is set to false after fetch
