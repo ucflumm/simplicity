@@ -1,4 +1,4 @@
 module.exports = {
-    baseUrl: "localhost://3030"
-    urlPostImage: "http://localhost:3030/api/image"
-}   
+  baseUrl: "simplicity.host",
+  urlPostImage: "http://api.simplicity.host/api/image",
+};
