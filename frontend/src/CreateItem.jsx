@@ -27,6 +27,7 @@ const CreateItem = () => {
       formData.append(key, item[key]);
     });
     console.log(formData);
+    console.log(`${process.env.REACT_APP_BASE_URL}/api/image`);
     axios.post(`${process.env.REACT_APP_BASE_URL}/api/image`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
