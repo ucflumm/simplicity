@@ -12,9 +12,6 @@ const itemAdjustmentSchema = new mongoose.Schema({
   user: {
     type: String,
   },
-  name: {
-    type: String,
-  },
   quantityChange: Number,
   description: String,
   timestamp: {

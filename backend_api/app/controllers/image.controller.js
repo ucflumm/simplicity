@@ -39,27 +39,20 @@ exports.create = async (req, res) => {
       }
     }
 
-    // Generate a random UPC if not provided made sure its 13 digits
-    // Also make sure the UPC is unique and it will rerandom if it is not unique but it stops at 3 times.
+    // Generate a random UPC if not provided
     if (!req.body.upc) {
-      let randomAttempts = 0;
-      let randomUpc = Math.floor(Math.random() * 10000000000000);
-      while (randomAttempts < 3) {
-        const data = await Item.findOne({ upc: randomUpc });
-        if (!data) {
-          req.body.upc = randomUpc;
-          console.log("passed UPC random validation");
-          break;
-        }
-        randomUpc = Math.floor(Math.random() * 10000000000000);
-        randomAttempts++;
-      }
-      if (randomAttempts === 3) {
-        res.status(400).send({ message: "Failed to generate a unique UPC!" });
-        return;
-      }
-      console.log("passed upc check");
+      req.body.upc = Math.floor(Math.random() * 1000000000);
     }
+
+    console.log("passed validation");
+
+    // Check for existing UPC
+    const data = await Item.findOne({ upc: req.body.upc });
+    if (data) {
+      res.status(400).send({ message: "UPC already exists!" });
+      return;
+    }
+    console.log("passed upc check");
 
     // Create a new item
     const item = new Item({
@@ -185,7 +178,6 @@ exports.update = [
           itemId: updatedItem._id,
           user: user,
           upc: updatedItem.upc,
-          name: updatedItem.name,
           quantityChange: newQuantity - oldQuantity,
           description: `Quantity changed from ${oldQuantity} to ${newQuantity} for item ${itemName} by ${user}`,
         });

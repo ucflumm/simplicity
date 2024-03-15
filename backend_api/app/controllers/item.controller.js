@@ -143,15 +143,13 @@ exports.update = async (req, res) => {
     ) {
       // Calculate the change in quantity
       const quantityChange = updatedItem.quantity - currentItem.quantity;
-      const name = updatedItem.name;
-      console.log("Name:", name);
+
       // Record the adjustment
       console.log("User ID:", req.body.userId);
       await recordAdjustment({
         itemId: updatedItem._id,
         user: req.body.userId || "defaultUser", // Default user if not provided
         quantityChange,
-        name: updatedItem.name,
         description: `Quantity changed from ${currentItem.quantity} to ${updatedItem.quantity} for item "${currentItem.name}" by user ${req.body.user}`,
       });
     }
@@ -236,7 +234,7 @@ exports.updateQuantityByUPC = async (req, res) => {
   let { user } = req.body; // Attempt to get user from the request body
 
   // Default the user to "mobile" if not provided
-  user = user || "Android-Client";
+  user = user || "mobile";
 
   if (isNaN(newQuantity) || newQuantity < 0) {
     return res
@@ -270,7 +268,6 @@ exports.updateQuantityByUPC = async (req, res) => {
         itemId: currentItem._id, // Now you have the item ID for tracking
         upc,
         user,
-        name: currentItem.name,
         quantityChange: newQuantity - oldQuantity,
         description: `Quantity updated from ${oldQuantity} to ${newQuantity} for "${itemName}" (UPC: ${upc}) by ${user}`,
       });
