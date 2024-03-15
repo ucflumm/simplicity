@@ -6,8 +6,8 @@ import Header from './Header'; // Import the Header component
 import ProductGrid from './ProductGrid';
 import WhiteContainer from './WhiteContainer';
 import CreateItem from './CreateItem';
-import SearchBar from './SearchBar';
 import Adjustments from './Adjustments';
+import AdjustmentsSelection from './AdjustmentsSelection';
 // Import other components you might navigate to
 
 // Import your route components
@@ -40,6 +40,11 @@ const App = () => {
           <Route path="/create-item" element={
             <WhiteContainer>
               <CreateItem />
+            </WhiteContainer>
+          } />
+          <Route path="/adjustments" element={
+            <WhiteContainer>
+              <AdjustmentsSelection />
             </WhiteContainer>
           } />
           <Route path="/adjustments/:productId" element={
