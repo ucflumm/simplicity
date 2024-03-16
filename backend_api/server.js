@@ -7,7 +7,7 @@ const path = require("path");
 const app = express();
 cors;
 var corsOptions = {
-  origin: ["http://simplicity.host"],
+  origin: ["https://simplicity.host"],
 };
 
 app.use(cors(corsOptions));
