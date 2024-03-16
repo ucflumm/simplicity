@@ -26,3 +26,5 @@ mongo_db/
 /uploads/*.jpg
 metrics.*
 WiredTiger*
+data
+letsencrypt
