@@ -5,13 +5,12 @@ const sharp = require("sharp");
 const path = require("path");
 
 const app = express();
-//cors
-// var corsOptions = {
-//   origin: ["http://localhost:3000"],
-// };
+cors;
+var corsOptions = {
+  origin: ["http://simplicity.host"],
+};
 
-// app.use(cors(corsOptions));
-app.use(cors());
+app.use(cors(corsOptions));
 //parse requests of content-type - application/json
 app.use(express.json());
 //parse requests of content-type - application/x-www-form-urlencoded
