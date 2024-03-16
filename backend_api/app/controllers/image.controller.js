@@ -39,6 +39,13 @@ exports.create = async (req, res) => {
       }
     }
 
+    if (req.body.upc) {
+      const upcCheck = await Item.findOne({ upc: req.body.upc });
+      if (upcCheck) {
+        res.status(400).send({ message: "UPC already exists!" });
+        return;
+      }
+    }
     // Generate a random UPC if not provided made sure its 13 digits
     // Also make sure the UPC is unique and it will rerandom if it is not unique but it stops at 3 times.
     if (!req.body.upc) {
