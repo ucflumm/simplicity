@@ -34,8 +34,8 @@ function SideNav() {
 
   return (
     <div className={`sidenav ${collapsed ? 'collapsed' : ''}`}>
-      <NavItem icon={<HomeIcon sx={{ color: 'white', fontSize: '30px' }} />} text="Home" link="/" collapsed={collapsed} />
-      <NavItem icon={<FolderCopyIcon sx={{ color: 'white' }} />} text="Item Library" link="/item-library" collapsed={collapsed} />
+      <NavItem icon={<HomeIcon sx={{ color: 'white', fontSize: '30px' }} />} text="Item Library" link="/" collapsed={collapsed} />
+      {/* <NavItem icon={<FolderCopyIcon sx={{ color: 'white' }} />} text="Item Library" link="/item-library" collapsed={collapsed} /> */}
       <NavItem icon={<AddBoxIcon sx={{ color: 'white' }} />} text="Create Item" link="/create-item" collapsed={collapsed} />
       <NavItem icon={<LocalGroceryStoreIcon sx={{ color: 'white' }} />} text="Adjustments" link="/adjustments" collapsed={collapsed} />
       <Box className="toggle-btn" onClick={toggleNav}>
