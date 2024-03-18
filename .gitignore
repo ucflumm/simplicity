@@ -31,3 +31,4 @@ letsencrypt
 backend_api/app/config/db.config.js
 .env
 mongo-init.js
+init-mongo.js
