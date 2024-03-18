@@ -28,3 +28,5 @@ metrics.*
 WiredTiger*
 data
 letsencrypt
+backend_api/app/config/db.config.js
+.env
