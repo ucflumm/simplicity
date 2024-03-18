@@ -12,6 +12,7 @@ import {
   Typography,
   Box,
   IconButton, // Import IconButton from MUI for sort button
+
   CircularProgress, // Import CircularProgress for loading indicator
   Button, // Import Button from MUI for action button
   Dialog, // Import Dialog for confirmation modal
@@ -19,6 +20,7 @@ import {
   DialogContent, // Import DialogContent for modal content
   DialogContentText, // Import DialogContentText for modal text
   DialogTitle // Import DialogTitle for modal title
+
 } from '@mui/material';
 import SearchBar from './SearchBar'; // Import SearchBar component
 import PreviewItem from './previewItem'; // Import PreviewItem component for modal
@@ -84,6 +86,7 @@ const ProductList = () => {
     setIsModalOpen(false); // Close the modal
   };
 
+
   const handleOpenDeleteDialog = (product) => {
     setProductToDelete(product);
     setDeleteDialogOpen(true);
@@ -144,6 +147,9 @@ const ProductList = () => {
                 <TableRow
                   key={product._id}
                   sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
+                  onClick={() => handleProductClick(product)}
                 >
                   <TableCell component="th" scope="product" align="center">
                     <Box
@@ -171,6 +177,7 @@ const ProductList = () => {
             ) : (
               <TableRow>
                 <TableCell colSpan={7} align="center">No products found</TableCell>
+                <TableCell colSpan={6} align="center">No products found</TableCell>
               </TableRow>
             )}
           </TableBody>
