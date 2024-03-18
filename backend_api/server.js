@@ -3,6 +3,7 @@ const cors = require("cors");
 const multer = require("multer");
 const sharp = require("sharp");
 const path = require("path");
+require("dotenv").config();
 
 const app = express();
 cors;
