@@ -12,7 +12,13 @@ import {
   Typography,
   Box,
   IconButton, // Import IconButton from MUI for sort button
-  CircularProgress // Import CircularProgress for loading indicator
+  CircularProgress, // Import CircularProgress for loading indicator
+  Button, // Import Button from MUI for action button
+  Dialog, // Import Dialog for confirmation modal
+  DialogActions, // Import DialogActions for modal actions
+  DialogContent, // Import DialogContent for modal content
+  DialogContentText, // Import DialogContentText for modal text
+  DialogTitle // Import DialogTitle for modal title
 } from '@mui/material';
 import SearchBar from './SearchBar'; // Import SearchBar component
 import PreviewItem from './previewItem'; // Import PreviewItem component for modal
@@ -27,10 +33,13 @@ const ProductList = () => {
   const [selectedProduct, setSelectedProduct] = useState(null); // State to store selected product for preview
   const [isModalOpen, setIsModalOpen] = useState(false); // State to control modal visibility
   const [sortOrder, setSortOrder] = useState('desc'); // State to control sort order
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false); // State to control delete confirmation dialog visibility
+  const [productToDelete, setProductToDelete] = useState(null); // State to store product to delete
 
   const fetchProducts = useCallback(async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/item`);
+      console.log('response', response)
       const productsWithImages = await Promise.all(response.data.map(async (item) => {
         const imageResponse = await axios.get(`${process.env.REACT_APP_BASE_URL}/api/image/id/${item._id}`, { responseType: 'blob' });
         const imageUrl = URL.createObjectURL(imageResponse.data);
@@ -44,7 +53,7 @@ const ProductList = () => {
     } finally {
       setLoading(false); // Ensure loading is set to false after fetch
     }
-  }, []);
+  }, []); 
 
   useEffect(() => {
     fetchProducts();
@@ -74,6 +83,23 @@ const ProductList = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false); // Close the modal
+  };
+
+  const handleOpenDeleteDialog = (product) => {
+    setProductToDelete(product);
+    setDeleteDialogOpen(true);
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialogOpen(false);
+  };
+
+  const handleDeleteProduct = async () => {
+    if (productToDelete) {
+      await axios.delete(`${process.env.REACT_APP_BASE_URL}/api/item/id/${productToDelete._id}`);
+      fetchProducts();
+      handleCloseDeleteDialog();
+    }
   };
 
   // Function to toggle sort order and sort products by quantity
@@ -110,6 +136,7 @@ const ProductList = () => {
               </TableCell>
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Category</Typography></TableCell>
               <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Sell Price</Typography></TableCell>
+              <TableCell align="center"><Typography style={{ fontSize: '20px', fontWeight: 'bold', color: "#000" }}>Action</Typography></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -117,8 +144,7 @@ const ProductList = () => {
               filteredProducts.map((product) => (
                 <TableRow
                   key={product._id}
-                  sx={{ '&:last-child td, &:last-child th': { border: 0 }, cursor: 'pointer', '&:hover': { backgroundColor: 'rgba(0, 0, 0, 0.04)' } }}
-                  onClick={() => handleProductClick(product)}
+                  sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                 >
                   <TableCell component="th" scope="product" align="center">
                     <Box
@@ -133,11 +159,19 @@ const ProductList = () => {
                   <TableCell align="center"><Typography className="itemValue">{product.quantity}</Typography></TableCell>
                   <TableCell align="center"><Typography className="itemValue">{product.category}</Typography></TableCell>
                   <TableCell align="center"><Typography className="itemValue">${product.salePrice}</Typography></TableCell>
+                  <TableCell align="center">
+                    <Button variant="contained" color="primary" onClick={() => handleProductClick(product)} style={{ marginRight: '10px' }}>
+                      View
+                    </Button>
+                    <Button variant="contained" color="secondary" onClick={() => handleOpenDeleteDialog(product)}>
+                      Delete
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={6} align="center">No products found</TableCell>
+                <TableCell colSpan={7} align="center">No products found</TableCell>
               </TableRow>
             )}
           </TableBody>
@@ -150,6 +184,25 @@ const ProductList = () => {
           item={selectedProduct}
         />
       )}
+      <Dialog
+        open={deleteDialogOpen}
+        onClose={handleCloseDeleteDialog}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">{"Confirm Delete"}</DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Are you sure you want to delete this product?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDeleteDialog}>Cancel</Button>
+          <Button onClick={handleDeleteProduct} autoFocus>
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
     </>
   );
 };

@@ -311,6 +311,18 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
                 error={!!errors.name}
                 helperText={errors.name || ''}
               />
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                id="upc"
+                label="UPC"
+                name="upc"
+                value={item.upc}
+                onChange={handleChange}
+                error={!!errors.upc}
+                helperText={errors.upc || ''}
+              />
               <FormControl fullWidth margin="normal" error={!!errors.category}>
                 <InputLabel id="category-label">Category</InputLabel>
                 <Select
@@ -404,3 +416,4 @@ const ProductForm = ({ initialFormState = DEFAULT_FORM, onSubmit, onChange, mode
 };
 
 export default ProductForm;
+
