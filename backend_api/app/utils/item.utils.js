@@ -46,6 +46,7 @@ async function resizeFile(newPath) {
   await sharp(buffer)
     .toFile(outputFilePath)
     .then(await fs.promises.unlink(newPath));
+  console.log("After resize, File resized and saved to:", outputFilePath);
 }
 
 const processFile = async (req, res, next) => {

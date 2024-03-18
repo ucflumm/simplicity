@@ -132,7 +132,7 @@ exports.findImgById = async (req, res) => {
     const imagePath = path.join("uploads", `${id}.jpg`);
     fs.access(imagePath, fs.constants.F_OK, (err) => {
       if (err) {
-        // For debuggin console.log("Image not found!", imagePath);
+        console.log("Image not found!", imagePath);
         const defaultImagePath = path.resolve(
           "public",
           "images",
@@ -140,7 +140,7 @@ exports.findImgById = async (req, res) => {
         );
         return res.sendFile(defaultImagePath);
       } else {
-        // For Debugging console.log("Image found!");
+        console.log("Image found!");
         return res.sendFile(path.resolve(imagePath));
       }
     });
@@ -165,14 +165,14 @@ exports.update = [
           message: `Cannot update item with id ${id}. Item not found!`,
         });
       }
-      // debug log console.log("old item: ", currentItem);
-      // debug log console.log("old item quantity: ", currentItem.quantity);
-      // debug log console.log("new item: ", req.body);
-      // debug log console.log("new item quantity: ", req.body.quantity);
+      console.log("old item: ", currentItem);
+      console.log("old item quantity: ", currentItem.quantity);
+      console.log("new item: ", req.body);
+      console.log("new item quantity: ", req.body.quantity);
       const oldQuantity = currentItem.quantity;
       const newQuantity = Number(req.body.quantity);
       if (oldQuantity === newQuantity) {
-        // debug log console.log("Quantity did not change. No update necessary.");
+        console.log("Quantity did not change. No update necessary.");
         return res.status(400).send({
           message: "Quantity did not change. No update necessary.",
         });
