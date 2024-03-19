@@ -55,6 +55,14 @@ const processFile = async (req, res, next) => {
     const tempPath = req.file.path;
     const newFilename = id + path.extname(req.file.originalname);
     const newPath = path.join("uploads/", newFilename);
+    console.log(
+      "Process File: ",
+      tempPath,
+      newPath,
+      id,
+      req.body._id,
+      req.params.id
+    );
 
     try {
       await fs.promises.rename(tempPath, newPath);
