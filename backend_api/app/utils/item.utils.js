@@ -65,7 +65,7 @@ const processFile = async (req, res, next) => {
     );
 
     try {
-      await fs.promises.rename(tempPath, newPath);
+      console.log(await fs.promises.rename(tempPath, newPath));
       console.log("File successfully moved to: ", newPath);
       await resizeFile(newPath);
       req.body.imagePath = newPath; // Add the image path to the request body for further processing
